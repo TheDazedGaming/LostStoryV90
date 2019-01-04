@@ -1,4 +1,4 @@
 function start() {
-    cm.sendStorage();
-    cm.dispose();
+	cm.getPlayer().getStorage().sendStorage(cm.getClient(), 1100000);
+	cm.dispose();
 }

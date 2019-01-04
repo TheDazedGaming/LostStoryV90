@@ -1,47 +1,70 @@
 /*
-Moose, Power of Shield
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-var status = -1;
+/*
+Moose
+Warps to exit map etc.
+*/
+
+var status;
+var exitMap = 221000300;
+var exitPortal = "mid00";
+
+function start() {
+	status = -1
+	action(1,0,0);
+}
 
 function action(mode, type, selection){
-    if (mode == 1) {
-	status++
-    } else {
-	cm.dispose();
-	return;
-    }
-    if (status == 0) {
-	if (cm.getMapId() == 924000002) { // At Exit Map
-	    cm.warp(240010400, 0);
-	    cm.dispose();
-	} else if (cm.getMapId() == 924000000) { // At start map
-	    cm.sendNext("I have to let you know one thing before sending you to the training field. You have to hold #b#t1092041##k that I gave you in shield training field. Otherwise, you're dead.");
-	} else {
-	    cm.warp(924000002, 0);
-	    cm.dispose();
-	}
-    } else if (status == 1) {
-	cm.sendSimple("Don't forget #rto hold shield#k before you get there! \r\n #b#L0# I want to get #t1092041#.#l \r\n #b#L1# Let me go in to #m924000001#.#l \r\n #b#L2# Let me out.#l");
-
-    } else if (status == 2) {
-	if (selection == 0) {
-	    if (!cm.haveItem(1092041)) {
-		if (cm.canHold(1092041)) {
-		    cm.gainItem(1092041, 1);
-		    cm.sendOk("I gave you #t1092041#. Check inventory. You have to be equipped with it!");
-		} else {
-		    cm.sendOk("I couldn...t give you #t1092041##k as there's no blank in Equipment box. Make a blank and try again." );
+	if (mode <= 0 && status == 0)//I think I messed something up here, maybe.
+		cm.dispose();
+	else {
+		if (mode == 1)
+			status++;
+		else
+			status--;
+		var mapId = cm.getPlayer().getMapId();
+		if (mapId == exitMap) {
+			if (status == 0) 
+				cm.sendNext("See you next time.");
+			else {
+				cm.warp(103000000,"mid00");
+				cm.dispose();
+			}
 		}
-	    } else {
-		cm.sendOk("You already have #t1092041##k. No need more.");
-	    }
-	    cm.safeDispose();
-	} else if (selection == 1) {
-	    cm.warp(924000001, 0);
-	    cm.dispose();
-	} else {
-	    cm.warp(240010400, 0);
-	    cm.dispose();
+		else {
+			var outText = "Would you like to leave, " +  cm.getPlayer().getName()  +  "? Once you leave the map, you'll have to restart the whole quest if you want to try it again, and Juudai will be sad.  Do you still want to leave this map?";
+			if (status == 0)
+				cm.sendYesNo(outText);
+			else if (mode == 1) {
+				var eim = cm.getPlayer().getEventInstance();
+				if (eim == null)
+					cm.warp(221000300,0);
+				else if (cm.isLeader())
+					eim.disbandParty();
+				else
+					eim.leftParty(cm.getPlayer());
+				cm.dispose();
+			} else
+				cm.dispose();
+		}
 	}
-    }
 }

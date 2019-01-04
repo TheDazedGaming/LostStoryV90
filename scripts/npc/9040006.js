@@ -5,14 +5,15 @@
  * Guild Quest Stage 3
  */
 
+
 function start() {
     //everything can be done in one status, so let's do it here.
-    var eim = cm.getEventInstance();
+    var eim = cm.getPlayer().getEventInstance();
     if (eim == null) {
 	cm.warp(990001100);
     } else {
 	if (eim.getProperty("leader").equals(cm.getName())) {
-	    if (cm.getMap().getReactorByName("watergate").getState() > 0){
+	    if (cm.getPlayer().getMap().getReactorByName("watergate").getCurrState() > 0){
 		cm.sendOk("You may proceed.");
 	    } else {
 		var currentCombo = eim.getProperty("stage3combo");
@@ -28,13 +29,15 @@ function start() {
 		    var guess = getGroundItems();
 		    if (guess != null) {
 			if (combo == guess) {
-			    cm.getMap().getReactorByName("watergate").hitReactor(cm.getC());
+			    cm.getPlayer().getMap().getReactorByName("watergate").hitReactor(cm.getClient());
 			    cm.sendOk("You may proceed.");
-			    cm.showEffect(true, "quest/party/clear");
-			    cm.playSound(true, "Party1/Clear");
-			    var prev = eim.setProperty("stage3clear","true",true);
+				
+			    cm.getPlayer().getMap().broadcastMessage(Packages.tools.MaplePacketCreator.showEffect("quest/party/clear"));
+				cm.getPlayer().getMap().broadcastMessage(Packages.tools.MaplePacketCreator.playSound("Party1/Clear"));
+			    var prev = eim.getProperty("stage3clear");
+				eim.setProperty("stage3clear","true");
 			    if (prev == null) {
-				cm.gainGP(75);
+					cm.gainGP(100);
 			    }
 			} else {
 			    if (attempt < 7) {
@@ -84,8 +87,8 @@ function start() {
 				string += " attempt.";
 
 				//spawn one black and one myst knight
-				cm.spawnMob(9300036, -350, 150);
-				cm.spawnMob(9300037, 400, 150);
+				spawnMob(9300036, -350, 150, cm.getPlayer().getMap());
+				spawnMob(9300037, 400, 150, cm.getPlayer().getMap());
 
 				cm.sendOk(string);
 				eim.setProperty("stage3attempt",attempt + 1);
@@ -94,10 +97,10 @@ function start() {
 				eim.setProperty("stage3combo","reset");
 				cm.sendOk("You have failed the test. Please compose yourselves and try again later.");
 
-				for (var i = 0; i < 5; i++) {
+				for (var i = 0; i < 6; i++) {
 				    //keep getting new monsters, lest we spawn the same monster five times o.o!
-					cm.spawnMob(9300036, randX(), 150);
-					cm.spawnMob(9300037, randX(), 150);
+					spawnMob(9300036, randX(), 150, cm.getPlayer().getMap());
+					spawnMob(9300037, randX(), 150, cm.getPlayer().getMap());
 				}
 			    }
 			}
@@ -128,11 +131,11 @@ function makeCombo() {
 
 //check the items on ground and convert into an applicable string; null if items aren't proper
 function getGroundItems() {
-    var items = cm.getMap().getItemsInRange(cm.getPlayer().getPosition(), java.lang.Double.POSITIVE_INFINITY);
+    var items = cm.getPlayer().getMap().getMapObjectsInRange(cm.getPlayer().getPosition(), Packages.java.lang.Double.POSITIVE_INFINITY, Packages.java.util.Arrays.asList([Packages.server.maps.MapleMapObjectType.ITEM]));
     var itemInArea = new Array(-1, -1, -1, -1);
         
     if (items.size() != 4) {
-	cm.playerMessage("There are too many items in the map. Please remove some");
+	cm.getPlayer().dropMessage("There are too many items in the map. Please remove some");
 	return null;
     }
         
@@ -141,14 +144,14 @@ function getGroundItems() {
 	var item = iter.next();
 	var id = item.getItem().getItemId();
 	if (id < 4001027 || id > 4001030) {
-	    cm.playerMessage("Some items in the map are not part of the 4 items needed");
+	    cm.getPlayer().dropMessage("Some items in the map are not part of the 4 items needed");
 	    return null;
 	} else {
 	    //check item location
 	    for (var i = 0; i < 4; i++) {
-		if (cm.getMap().getArea(i).contains(item.getPosition())) {
+		if (cm.getPlayer().getMap().getArea(i).contains(item.getPosition())) {
 		    itemInArea[i] = id - 4001027;
-		    //cm.playerMessage("Item in area "+i+": " + id);
+		    //cm.getPlayer().dropMessage("Item in area "+i+": " + id);
 		    break;
 		}
 	    }
@@ -157,9 +160,9 @@ function getGroundItems() {
         
     //guaranteed four items that are part of the stage 3 item set by this point, check to see if each area has an item
     if (itemInArea[0] == -1 || itemInArea[1] == -1 || itemInArea[2] == -1 || itemInArea[3] == -1) {
-	cm.playerMessage("Please place these in correct positions: " + (itemInArea[0] == -1 ? "Statue 1, " : "") + (itemInArea[1] == -1 ? "Statue 2, " : "") + (itemInArea[2] == -1 ? "Statue 3, " : "") + (itemInArea[3] == -1 ? "Statue 4. " : ""));
+	cm.getPlayer().dropMessage("Please place these in correct positions: " + (itemInArea[0] == -1 ? "Statue 1, " : "") + (itemInArea[1] == -1 ? "Statue 2, " : "") + (itemInArea[2] == -1 ? "Statue 3, " : "") + (itemInArea[3] == -1 ? "Statue 4. " : ""));
               /*  for (var i = 0; i < 4; i++) {
-                        cm.playerMessage("Item in area "+i+": " + itemInArea[i]);
+                        cm.getPlayer().dropMessage("Item in area "+i+": " + itemInArea[i]);
                 }*/
 	return null;
     }
@@ -190,13 +193,13 @@ function compare(answer, guess) {
                 debugGuess += guess[d] + " ";
         }
         
-        cm.playerMessage(debugAnswer);
-        cm.playerMessage(debugGuess);*/
+        cm.getPlayer().dropMessage(debugAnswer);
+        cm.getPlayer().dropMessage(debugGuess);*/
         
     for (var i = 0; i < answer.length; i) {
 	if (answer[i] == guess[i]) {
 	    correct++;
-	    //cm.playerMessage("Item match : " + answer[i]);
+	    //cm.getPlayer().dropMessage("Item match : " + answer[i]);
                         
 	    //pop the answer/guess at i
 	    if (i != answer.length - 1) {
@@ -215,8 +218,8 @@ function compare(answer, guess) {
                                 debugGuess += guess[d] + " ";
                         }
 
-                        cm.playerMessage(debugAnswer);
-                        cm.playerMessage(debugGuess);*/
+                        cm.getPlayer().dropMessage(debugAnswer);
+                        cm.getPlayer().dropMessage(debugGuess);*/
 	}
 	else {
 	    i++;
@@ -235,12 +238,12 @@ function compare(answer, guess) {
     }
         
     /*for (var d = 0; d < answer.length; d++) {
-                cm.playerMessage("Item " + d + " in combo: " + answerItems[d] + " | in guess: " + guessItems[d]);
+                cm.getPlayer().dropMessage("Item " + d + " in combo: " + answerItems[d] + " | in guess: " + guessItems[d]);
         }*/
         
     for (var k = 0; k < answerItems.length; k++) {
 	var inc = Math.min(answerItems[k], guessItems[k]);
-	//cm.playerMessage("Incorrect for item " + k + ": " + inc);
+	//cm.getPlayer().dropMessage("Incorrect for item " + k + ": " + inc);
 	incorrect += inc;
     }
         
@@ -250,4 +253,9 @@ function compare(answer, guess) {
 //for mass spawn
 function randX() {
     return -350 + Math.floor(Math.random() * 750);
+}
+
+function spawnMob(id, x, y, map) {
+	var mob = Packages.server.life.MapleLifeFactory.getMonster(id);
+	map.spawnMonsterOnGroundBelow(mob, new Packages.java.awt.Point(x, y));
 }

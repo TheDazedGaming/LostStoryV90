@@ -1,6 +1,3 @@
-/* @Author SharpAceX
-*/
-
 function act() {
-	rm.dropItems();
+	rm.dropItems(true, 5, 100, 5000);
 }

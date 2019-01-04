@@ -5,9 +5,6 @@
 */
 
 
-
-importPackage(Packages.client);
-
 var status = 0;
 var selectedType = -1;
 var selectedItem = -1;
@@ -54,7 +51,7 @@ function action(mode, type, selection) {
 		selectedType = selection;
 		if (selectedType == 0){ //mineral refine
 			var selStr = "Which mineral would you like to refine?#b";
-			var minerals = new Array ("Bronze Plate","Steel Plate","Mithril Plate","Adamantium Plate","Silver Plate","Orihalcon Plate","Gold Plate","Lithium");
+			var minerals = new Array ("Bronze Plate","Steel Plate","Mithril Plate","Adamantium Plate","Silver Plate","Orihalcon Plate","Gold Plate","Lidium");
 			for (var i = 0; i < minerals.length; i++){
 				selStr += "\r\n#L" + i + "# " + minerals[i] + "#l";
 			}
@@ -82,13 +79,10 @@ function action(mode, type, selection) {
 	}
 	else if (status == 3 && mode == 1) {
 		selectedItem = selection;
-		if (equip)
-		{
+		
 			selectedItem = selection;
 			qty = 1;
-		}
-		else
-			qty = selection;
+		
 			
 		if (selectedType == 0){ //mineral refine
 			var itemSet = new Array(4011000,4011001,4011002,4011003,4011004,4011005,4011006,4011008);
@@ -137,44 +131,27 @@ function action(mode, type, selection) {
 		cm.sendGetNumber(prompt,1,1,100)
 	}
 	else if (status == 4 && mode == 1) {
-		var complete = true;
-		
-		if (cm.getMeso() < cost * qty)
-			{
-				cm.sendOk("I'm afraid you cannot afford my services.")
+	var complete = false;
+	qty = selection;	
+	if (cm.getMeso() < cost * qty) {
+            cm.sendOk("My fee is for the good of all my people. If you cannot pay it, then begone.");
+			cm.dispose();
+			return;
+	} else {
+	    if (mats instanceof Array) {
+			for (var i = 0; i < mats.length; i++) {
+				//	complete = cm.haveItem(mats[i], matQty[i] * qty);
+				//if (!complete) {
+				//	break;
+				//}
+				if (matQty[i] == 1 || qty <= 1){
+					if (!cm.haveItem(mats[i], matQty[i]))complete = false;
+				}else if (!cm.haveItem(mats[i],matQty[i] * qty))complete=false;
 			}
-			else
-			{
-				if (mats instanceof Array) {
-					for(var i = 0; complete && i < mats.length; i++)
-					{
-						if (matQty[i] * qty == 1)	{
-							if (!cm.haveItem(mats[i]))
-							{
-								complete = false;
-							}
-						}
-						else {
-							var count = 0;
-							var iter = cm.getChar().getInventory(MapleInventoryType.ETC).listById(mats[i]).iterator();
-							while (iter.hasNext()) {
-								count += iter.next().getQuantity();
-							}
-							if (count < matQty[i] * qty)
-								complete = false;
-						}					
-					}
-				}
-				else {
-					var count = 0;
-					var iter = cm.getInventory(4).listById(mats).iterator();
-					while (iter.hasNext()) {
-						count += iter.next().getQuantity();
-					}
-					if (count < matQty * qty)
-						complete = false;
-				}
-			}
+	    } else {
+			complete = cm.haveItem(mats, matQty * qty);
+	    }	
+    }
 			
 			if (!complete) 
 				cm.sendNext("Please check and see if you have all the necessary items with you. If so, then please check your etc. inventory and see if.");

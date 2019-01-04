@@ -27,6 +27,6 @@
 */
 
 function act(){
-	rm.spawnMonster(7130402, -340, 100);
-	rm.mapMessage(5, "Here comes Green King Goblin!");
+    rm.spawnMonster(7130402, -340, 100);
+    rm.mapMessage(5, "Here comes Green King Goblin!");
 }

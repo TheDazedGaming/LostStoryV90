@@ -5,16 +5,16 @@ var maxp = 5;
 
 function action(mode, type, selection) {
     if (mode == 1) {
-	status++;
+    	status++;
     } else {
 	if (status <= 1) {
-	    cm.safeDispose();
+	    cm.dispose();
 	    return;
 	}
 	status--;
     }
     if (status == 0) {
-	if (cm.isQuestActive(22515) || cm.isQuestActive(22516) || cm.isQuestActive(22517) || cm.isQuestActive(22518)) {
+	if (cm.isQuestStarted(22515) || cm.isQuestStarted(22516) || cm.isQuestStarted(22517) || cm.isQuestStarted(22518)) {
 		cm.sendYesNo("Would you like to go in the special Spore Training Center?");
 		status = 1;
 	}
@@ -34,7 +34,7 @@ function action(mode, type, selection) {
 		cm.dispose();
 	}
     } else if (status == 2) {
-	cm.warp(910060100,0);
-	cm.dispose();
+		cm.warp(910060100,0);
+		cm.dispose();
     }
 }

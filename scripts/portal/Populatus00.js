@@ -1,62 +1,58 @@
+/*
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 function enter(pi) {
-	if (pi.getPlayer().getClient().getChannel() != 1 && pi.getPlayer().getClient().getChannel() != 2) {
-		pi.playerMessage(5, "This boss may only be attempted on channel 1 and 2");
+    var papuMap = pi.getClient().getChannelServer().getMap(220080001);
+	var bossQuest = pi.getQuestRecord(30030);
+	var bossQuest1 = pi.getQuestRecord(30031);
+    var timeData = bossQuest.getTimeData();
+	var customData = bossQuest1.getCustomData();
+    if (timeData == null) {
+        bossQuest.setTimeData("0");
+        timeData = "0";
+    }
+    var time = parseInt(timeData);
+	if (customData == null) {
+		bossQuest1.setCustomData("0");
+        customData = "0";
+	}
+	var amtFought = parseInt(customData);
+	if (time + (24 * 60 * 60 * 1000) <= pi.getCurrentTime()) {
+		amtFought = 0;
+	}
+	if (amtFought > 2 && time + (24 * 60 * 60 * 1000) >= pi.getCurrentTime()/* && !pi.getPlayer().isGM()*/) {
+		pi.getPlayer().dropMessage(5, "You may only attempt Papulatus 3 times a day. Time left: " + pi.getReadableMillis(pi.getCurrentTime(), time + (12 * 60 * 60 * 1000)));
 		return false;
 	}
-    if (pi.haveItem(4031870)) {
-	pi.warp(922020300, 0);
-	return true;
+    if (papuMap.getCharacters().size() == 0) {
+        pi.getPlayer().dropMessage("The room is empty. A perfect opportunity to challenge the boss.");
+        papuMap.resetReactors();
+    } else { // someone is inside
+        for (var i = 0; i < 3; i++) {
+            if (papuMap.getMonsterById(8500000 + i) != null) {
+                pi.getPlayer().dropMessage("Someone is currently fighting Papulatus.");
+                return false;
+            }
+        }
     }
-    if (!pi.haveItem(4031172)) {
-	return false;
-    }
-    if (pi.getPlayerCount(220080001) <= 0) { // Papu Map
-	var papuMap = pi.getMap(220080001);
-
-	papuMap.resetFully();
-
-	pi.playPortalSE();
-	pi.warp(220080001, "st00");
-	return true;
-    } else {
-	if (pi.getMap(220080001).getSpeedRunStart() == 0 && (pi.getMonsterCount(220080001) <= 0 || pi.getMap(220080001).isDisconnected(pi.getPlayer().getId()))) {
-	    pi.playPortalSE();
-	    pi.warp(220080001, "st00");
-	    return true;
-	} else {
-	    pi.playerMessage(5, "The battle against Papulatus has already begun, so you may not enter this place.");
-	    return false;
-	}
-    }
-
-/*    var canEnter = false;
-
-    if (pi.haveItem(4031172)) { // Ludibrium Medal
-	var currenttime = new Date().getTime();
-	var record = pi.getQuestRecord(7200);
-	var diff = currenttime - record.getCompletionTime();
-	
-	// After 1 day
-	if (diff >= 86400000) { // 24 hours
-	    record.setCompletionTime(currenttime);
-	    record.setCustomData("1");
-	    canEnter = true;
-	} else {
-	    var recordData = record.getCustomData();
-	    if (recordData == null || recordData.equals("")) {
-		record.setCompletionTime(currenttime);
-		record.setCustomData("1");
-		canEnter = true;
-	    } else if (recordData.equals("1")) {
-		record.setCustomData("2");
-		canEnter = true;
-	    }
-	}
-    } else {
-	return false;
-    }
-    if (!canEnter) {
-	pi.playerMessage(5, "You may only enter the Origin of Clocktower twice per day.");
-	return false;
-    }*/
+    pi.warp(220080001, "st00");
+    return true;
 }

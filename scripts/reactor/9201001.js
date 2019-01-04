@@ -28,6 +28,6 @@
  */
 
 function act(){
-        rm.mapMessage("A bright flash of light, then someone familiar appears in front of the blocked gate.");
-        rm.spawnNpc(9040003);
+    rm.mapMessage(5, "A bright flash of light, then someone familiar appears in front of the blocked gate.");
+    rm.spawnNpc(9040003);
 }

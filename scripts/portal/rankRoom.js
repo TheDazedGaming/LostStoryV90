@@ -1,7 +1,7 @@
 function enter(pi) {
-    pi.playPortalSE();
+    pi.playPortalSound();
     
-    switch (pi.getMapId()) {
+    switch (pi.getPlayer().getMapId()) {
 	case 130000000:
 	    pi.warp(130000100, 5); //or 130000101
 	    break;
@@ -24,4 +24,6 @@ function enter(pi) {
 		pi.warp(pi.getMapId() + 1, 0); //or + 2
 		break;
     }
+	
+	return true;
 }

@@ -7,8 +7,5 @@
 function start() {
     cm.useItem(2022458);
     cm.sendOk("Don't stop training. Every ounce of your energy is required to protect the world of Maple....");
-}
-
-function action(mode, type, selection) {
-    cm.dispose();
+	cm.dispose();
 }

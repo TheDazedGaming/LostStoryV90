@@ -58,7 +58,7 @@ function end(mode, type, selection) {
 	if(status == 2){
 		qm.gainItem(4032375, -1);
 		qm.forceCompleteQuest();
-		qm.forceStartQuest(2312);
+		qm.updateQuest(2311, "1");
 		qm.dispose();
 	}
 }

@@ -20,10 +20,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function enter(pi) {
-    pi.getPlayer().removeAll(4031507);
-    pi.getPlayer().removeAll(4031508);
-    if (pi.getMap(923010000).getCharactersSize() < 1)
-        pi.getMap(923010000).resetFully();
+    pi.removeAll(4031507);
+    pi.removeAll(4031508);
+    if (pi.getClient().getChannelServer().getMap(923010000).getCharacters().size() < 1)
+        pi.getClient().getChannelServer().getMap(923010000).killAllMonsters();
     pi.warp(230000003, "out00");
     return true;
 }

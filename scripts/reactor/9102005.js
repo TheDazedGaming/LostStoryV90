@@ -25,5 +25,7 @@
  * @map Primrose Hill
  */
 function act() {
-    rm.dropItems();
+	if(rm.getRandom().nextInt(0, 2) == 0){
+		rm.dropItem(4001095 + rm.getRandom().nextInt(0, 6), 1);
+	}
 }

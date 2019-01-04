@@ -1,57 +1,104 @@
 /*
-	Violet Balloon - LudiPQ Crack on the Wall NPC
-**/
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
 
-var status;
-var exp = 5950;
-			
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/*
+@	Author : Twdtwd
+@	Modified: iPoopMagic (David)
+@	NPC = Violet Balloon
+@	Map = Hidden-Street <Crack on the Wall>
+@	NPC MapId = 922010900
+@	Function = LPQ - Last Stage
+@
+@	Description: Used after the boss is killed to trigger the bonus stage.
+*/
+
+var status = 0;
+var party;
+var preamble;
+var gaveItems;
+var nthtext = "last";
+
 function start() {
     status = -1;
     action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (status == -1 && cm.isLeader()) {
-	var eim = cm.getEventInstance();
-
-	if (eim.getProperty("crackLeaderPreamble") == null) {
-	    eim.setProperty("crackLeaderPreamble", "done");
-	    cm.sendNext("This is the final stage; it'll be a final test of your strength. Kill the #bBlack Ratz#k on the ledge, and #bAlishar#k will spawn. Give the #rKey of Dimension#k that he drops to me, and you will have succeeded. Good luck!");
-	    cm.dispose();
-	} else {
-	    if (cm.haveItem(4001023)) {
-		status = 0;
-		cm.sendNext("Congratulations! You have defeated the boss, #bAlishar#k. Would you like to go to the bonus stage now?");
-	    } else {
-		cm.sendNext("Please bring me the #bKeys of Dimension#k by defeating #bAlishar#k.");
-		cm.dispose();
-	    }
-	}
-    } else if (status == -1 && !cm.isLeader()) {
-	cm.sendNext("Kill the #bBlack Ratz#k on the ledge, and #bAlishar#k will spawn. Get the leader of your party to hand the #rKey of Dimension#k that #bAlishar#k drops to me, and you will have succeeded. Good luck!");
-	cm.dispose();
-    } else if (status == 0 && cm.isLeader()) {
-	var eim = cm.getEventInstance();
-	clear(9,eim,cm);
-	cm.gainItem(4001023,-1);
-
-	var players = eim.getPlayers();
-	cm.givePartyExp(exp, players);
-	eim.setProperty("cleared", "true"); //set determine
-	eim.restartEventTimer(60000);
-	var bonusmap = cm.getMap(922011000);
-	for (var i = 0; i < players.size(); i++) {
-	    players.get(i).changeMap(bonusmap, bonusmap.getPortal(0));
-	}
-	cm.dispose();
-    } else {
-	cm.dispose();
+    if (mode < 1) cm.dispose();
+    else {
+        (mode == 1 ? status++ : status --);
+        var eim = cm.getPlayer().getEventInstance();
+        
+        if (status == 0) {
+            party = eim.getPlayers();
+            preamble = eim.getProperty("leader" + nthtext + "preamble");
+            gaveItems = eim.getProperty("leader" + nthtext + "gaveItems");
+            if (preamble == null) {
+                cm.sendOk("Hi. Welcome to the " + nthtext + " stage.");
+                eim.setProperty("leader" + nthtext + "preamble","done");
+                cm.dispose();
+            } else {
+                if (!isLeader()) {
+                    if (gaveItems == null) {
+                        cm.sendOk("Please tell your #bParty Leader#k to come talk to me");
+                        cm.dispose();
+                    } else {
+                        cm.sendOk("Hurry, go to the next stage, the portal is open!");
+                        cm.dispose();
+                    }
+                } else if (gaveItems == null) {
+                    cm.sendSimple("What's up?\r\n#L0#I've got your key!#l\r\n"); // #L1#There's something wrong here.#l
+                } else {
+					cm.dispose();
+				}
+            }
+        } else if (status == 1) {
+            if (selection == 0) {
+                if (cm.itemQuantity(4001023) >= 1) {
+                    cm.sendOk("Good job! You have collected the #b#t4001023#!#k");
+                } else {
+                    cm.sendOk("Sorry you don't have the #b#t4001023#.#k");
+                    cm.dispose();
+                }
+            }
+        } else if (status == 2) {
+            cm.removeAll(4001023);
+            
+			var map = eim.getMapInstance(cm.getPlayer().getMapId());
+			map.broadcastMessage(Packages.tools.MaplePacketCreator.showEffect("quest/party/clear"));
+			map.broadcastMessage(Packages.tools.MaplePacketCreator.playSound("Party1/Clear"));
+			//map.broadcastMessage(Packages.tools.MaplePacketCreator.environmentChange("gate", 2));
+			
+            cm.givePartyQuestExp("LudiPQLast");
+            eim.setProperty("9stageclear","true");
+            eim.setProperty("leader" + nthtext + "gaveItems","done");
+			eim.schedule("startBonus", 1000);
+            cm.dispose();
+        }            
     }
 }
 
-function clear(stage, eim) {
-    eim.setProperty("stage" + stage.toString() + "status","clear");
-
-    cm.showEffect(true, "quest/party/clear");
-    cm.playSound(true, "Party1/Clear");
+function isLeader() {
+    if (cm.getParty() == null)
+        return false;
+    else
+        return cm.isLeader();
 }

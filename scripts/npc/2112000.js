@@ -1,22 +1,22 @@
-var status = -1;
-
-function action(mode, type, selection) {
+/**
+ *	@Name: Yulete (Magatia PQ)
+ */
+function start() {
     var em = cm.getEventManager("Romeo");
     if (em == null) {
-	cm.sendOk("...");
-	cm.dispose();
-	return;
+		cm.sendOk("The event is not working, please contact a GM immediately.");
+		cm.dispose();
+		return;
     }
-    if (em.getProperty("stage").equals("1") && em.getProperty("stage5").equals("0")) {
-	//advance to angry!
-	cm.sendOk("What... a suspicious conspiracy? This can't be...");
-	em.setProperty("stage", "2");
-    } else if (em.getProperty("stage5").equals("1") && cm.getMap().getAllMonstersThreadsafe().size() == 0) {
-	cm.sendOk("Continue.");	
-	em.setProperty("stage5", "2");
-	cm.getMap().setReactorState();
+    if (em.getProperty("stage").equals("1") && cm.getPlayer().getEventInstance().getMapInstance(cm.getPlayer().getMapId()).getMonstersEvent(cm.getPlayer()).size() > 1) {
+		cm.sendOk("What... a suspicious conspiracy? This can't be...");
+		em.setProperty("stage", "2");
+    } else if (em.getProperty("stage5").equals("1") && cm.getPlayer().getEventInstance().getMapInstance(cm.getPlayer().getMapId()).getMonstersEvent(cm.getPlayer()).size() < 1) {
+		cm.sendOk("Mwahaha!!! The end awaits you on the other side.");	
+		em.setProperty("stage5", "2");
+		cm.getPlayer().getEventInstance().getMapInstance(cm.getPlayer().getMapId()).setReactorState();
     } else {
-	cm.sendOk("...");
+		cm.sendOk("Mwahaha!!! The end awaits you on the other side.");	
     }
     cm.dispose();
 }

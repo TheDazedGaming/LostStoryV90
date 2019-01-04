@@ -1,4 +1,5 @@
 function enter(pi) {
-    pi.warp(108000700,0);
- //what does this even do
+	pi.playPortalSound();
+	pi.warp(pi.getMapId() - 10, "west00");
+	return true;
 }

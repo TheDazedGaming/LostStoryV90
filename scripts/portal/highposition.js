@@ -1,36 +1,29 @@
-function enter(pi) {
-    if (pi.getPlayer().getLevel() < 15 || pi.isQuestFinished(29004)) {
-	return false;
-    }
-    if (!pi.isQuestActive(29004)) {
-	pi.forceStartQuest(29004);
-	pi.updateInfoQuest(27017, "enter=00000");
-	pi.forceStartQuest(27018, "0");
-    }
-    //nautilus, kerning, ellinia, perion, orbis in that order
-    var quest = pi.getInfoQuest(27017);
-    var number = parseInt(pi.getQuestRecord(27018).getCustomData());
-    var new_quest = "enter=";
-    var maps = Array(120000000, 103000000, 101010103, 102000000, 200080100);
-    var changedd = false;
-    for (var i = 0; i < maps.length; i++) {
-	var changed = false;
-	if (pi.getPlayer().getMapId() == maps[i]) {
-	    if (quest.substring(i+6, i+7).equals("0")) { //+6 for "enter="
-		new_quest += "1";
-		changed = true;
-		changedd = true;
-	    }
-	}
-	if (!changed) {
-	    new_quest += quest.substring(i+6, i+7);
-	}
-    }
-    if (changedd) {
-	pi.updateInfoQuest(27017, new_quest);
-	pi.forceStartQuest(27018, number+1, true);
-	pi.getPlayer().dropMessage(-1, (number+1) +"/5 completed");
-	pi.getPlayer().dropMessage(-1, "Currently taking on the Title - The One Who Stood On Top");
-	pi.showQuestMsg("Currently taking on the Title - The One Who Stood On Top " + (number+1) + "/5 completed");
-    }
+/*
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+ * Author: kevintjuh93
+ *
+*/
+function start(ms) {
+	ms.touchTheSky();
 }

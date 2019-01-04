@@ -1,11 +1,33 @@
 /*
-	Aqua Balloon - LudiPQ 6th stage NPC
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/*
+@	Author : Moogra
+@	NPC = Aqua Balloon
+@	Map = Hidden-Street <Stage 6>
+@	NPC MapId = 922010600
+@	Function = LPQ - 6th Stage
 */
 
 function start() {
-    cm.sendNext("Hello, and welcome to the 6th stage of the Ludibrium Party Quest. Look here, and you'll see a number of boxes. All you have to do, is find the right combination, and press up on it to teleport up. But, if you get it wrong, you will be teleported back down to the bottom. Good luck!");
-}
-
-function action(mode, type, selection) {
+    cm.sendOk("Try to find the right combination of numbers to reach the top.");
     cm.dispose();
 }

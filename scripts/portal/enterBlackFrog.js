@@ -1,12 +1,16 @@
 function enter(pi) {
-	if (pi.isQuestActive(22596)) {
-		pi.warp(922030001,0);
-		pi.forceCompleteQuest(22596);
-		pi.gainAp(5);
-		pi.playerMessage(5, "Ibech has ran away! Gained 5 AP!");
-	} else if (pi.isQuestFinished(22596)) {
-		pi.warp(922030001,0);
-	} else {
-		pi.warp(922030000,0);
+	if(pi.isQuestStarted(22596)){
+		var em = pi.getEventManager("EvanRage");
+ 		if(em.getProperty("state") != "0"){
+ 			pi.message("It seems somebody may be inside.");
+ 			pi.enableActions();
+ 			return true;
+ 		}else{
+ 			em.startInstance(pi.getPlayer());
+ 		}
+	}else{
+		//this check is fucked and just allows you in.. Too many quests to check for tho
+		if (!pi.isQuestStarted(22582) || pi.isQuestStarted(22582))pi.warp(922030000, 1);
 	}
+	return true;
 }

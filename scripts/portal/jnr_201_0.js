@@ -1,7 +1,10 @@
+/**
+ *	@Description: Back to Roid Map
+ */
 function enter(pi) {
-    if (pi.getMap().getReactorByName("jnr31_out").getState() > 0) {
-	pi.warp(926110200,0);
+	if (pi.getPlayer().getMap().getReactorByName("jnr31_out").getCurrState() > 0) {
+		pi.warp(926110200, 1);
     } else {
-	pi.playerMessage(5, "The portal is not open.");
+		pi.playerMessage(5, "The door is not open.");
     }
 }

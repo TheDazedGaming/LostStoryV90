@@ -1,10 +1,10 @@
 function enter(pi) {
-	if (pi.getPlayer().getLevel() <= 10 && pi.getPlayer().getJob() == 0) {
-		var m = pi.getPlayer().getMapId();
+	if (pi.getPlayer().getLevel() <= 10 && pi.getPlayer().getJob().getId() == 0) {
+		var m = pi.getPlayer().getMap().getId();
 		var npcid = 0;
 	
 		if (m == 120000101) { // Navigation Room, The Nautilus
-			npcid = 1072008; // Maybe 1090000?
+			npcid = 1090000; // Maybe 1090000?
 		} else if (m == 102000003) { // Warrior's Sanctuary
 			npcid = 1022000;
 		}else if (m == 103000003) { // Thieves' Hideout
@@ -17,6 +17,7 @@ function enter(pi) {
 	
 		if (npcid != 0) {
 			pi.openNpc(npcid);
+			return false;
 		}
 	}
 	return false;

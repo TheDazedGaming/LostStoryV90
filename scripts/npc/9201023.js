@@ -1,43 +1,76 @@
 /*
-	NPC Name: 		Hera
-	Map(s): 		Towns
-	Description: 		Wedding Village Entrance
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/**
+ * 9201023 - Nana(K)
+ * 
+ * 9201001 = 4031367
+ * 9201023 = 4031368
+ * 9201024 = 4031369
+ * 9201025 = 4031370
+ * 9201026 = 4031371
+ * 9201027 = 4031372
+ *
+ */
+var itemid = 4000015;
+var amount = 40;
+var proofoflove = 4031368;
 
 var status = -1;
 
 function start() {
-    cm.sendSimple("Hello there~  How can I help you with on this lovely day in Maple World? \n\r #b#L0# I would like to go to Wedding village.#l \n\r #L1# I am married and I want my Chair of Love!!! #l");
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode == 1) {
-        status++;
-    } else if (status == 1 && mode == 0) {
-        cm.sendOk("Are you really going to miss this incredible chance? It is a very beautiful place to be. Probably you have yet to meet someone you love? Exactly it is. If you are falling in love with someone then it is impossible to ignore this lovely news.");
+    if (mode == -1) {
         cm.dispose();
-        return;
     } else {
-        cm.dispose();
-        return;
-    }
-    if (status == 0) {
-        switch (selection) {
-            case 0:
-                cm.sendNext("Oh! What a wonderful day! The world is so beautiful~! The world seems to be full of love, isn't it? I can feel the spirit of love filling up the wedding village even from here~!");
-                break;
-            case 1:
-                cm.sendOk("I am truly sorry my dear.  This Chair of Love is a special gift designed only for the married ones.  You might want to get married first.");
-                cm.dispose();
-                break;
+        if (mode == 0 && status == 0) {
+            cm.dispose();
+            return;
         }
-    } else if (status == 1) {
-        cm.sendYesNo("Have you ever been to the wedding village? It is an amazing place where the love is overloading. Loving couple can get married there, How romantic it is? If you want to be there, I'll show you the way.");
-    } else if (status == 2) {
-        cm.sendNext("You made a right decision! You can feel the spirit of love at the wedding village to the fullest. When you want to come back, your destination will be here so don't worry about it.");
-    } else if (status == 3) {
-        cm.saveLocation("AMORIA");
-        cm.warp(680000000, 0);
-        cm.dispose();
+        if (mode == 1)
+            status++;
+        else
+            status--;
+        if (!cm.haveItem(itemid, amount)) {
+            if (status == 0) {
+                cm.sendNext("Hey, you look like you need proofs of love? I can get them for you.");
+            } else if (status == 1) {
+                cm.sendNext("All you have to do is bring me " + amount + " #b#t" + itemid + "##k");
+                cm.dispose();
+            }
+        } else {
+            if (status == 0) {
+            	if(cm.canHold(proofoflove)){
+	                cm.sendNext("Wow, you were quick! Heres the proof of love...");
+	                cm.gainItem(itemid, -amount)
+	                cm.gainItem(proofoflove, 1);
+	                cm.dispose();
+                }else{
+                	cm.sendOk("Make room in your ETC tab.");
+                	cm.dispose(); 
+                }
+            }
+        }
     }
 }

@@ -1,25 +1,33 @@
-/*
-	NPC Name: 		Agent Kitty
-	Map(s): 		Special Training Camp for Agent (970030000)
-	Description: 		Agent event Starter
-*/
+/* NPC Base
+	Map Name (Map ID)
+	Extra NPC info.
+ */
 
-function start() {
-    if (cm.getMapId() == 970030000) {
-	cm.start_DojoAgent(false, false);
-	cm.dispose();
-    } else if (cm.getMapId() == 910000000) {
-	cm.sendYesNo("Do you want to go to Special Training Camp for Agent?")
-	type = 1;
-    } else {
-	cm.sendYesNo("Do you want to get out now?");
-	type = 2;
-    }
+var status;
+
+function start(){
+	status = -1;
+	action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode == 1) {
-	cm.warp(970030000, 0);
-    }
-    cm.dispose();
+    if (mode < 0 || (status == 0 && mode == 0)){
+        cm.dispose();
+		return;
+	}
+	if (mode == 1)
+		status++;
+	else
+		status--;
+	
+	if(status == 0){
+		if(cm.getPlayer().getMapId() != 970030000){
+			cm.sendYesNo("Leaving so early?");
+		}
+	}else{
+		if(cm.getPlayer().getMapId() != 970030000){
+			cm.getPlayer().getEventInstance().removePlayer(cm.getPlayer());
+			cm.dispose();
+		}
+	}
 }

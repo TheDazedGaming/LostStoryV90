@@ -1,8 +1,30 @@
+/*
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/*
+ * @author kevintjuh93
+ */
 function enter(pi) {
-    if (pi.getQuestStatus(20021) == 0) {
-	pi.playerSummonHint(true);
-	pi.summonMsg("Welcome to the world of Maple! My name is Koo, and I will be your guide! I will be here to answer your questions and guide you until you reach Level 10 and become a Knight-in-Training. If you have any questions, double-click me!");
-//	pi.forceCompleteQuest(20100);
-	pi.forceCompleteQuest(20021);
-    }
+	pi.spawnGuide();
+	pi.talkGuide("Welcome to Maple World! I'm Mimo. I'm in charge of guiding you until you reach Lv. 10 and become a Knight-In-Training. Double-click for further information!");
+	pi.blockPortal();
+	return true;
 }

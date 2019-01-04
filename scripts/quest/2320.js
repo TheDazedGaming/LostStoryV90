@@ -8,8 +8,6 @@ Version 1.0 - Script Done.(18/7/2010)
 =============================================================
 */
 
-importPackage(Packages.client);
-
 var status = -1;
 
 function start(mode, type, selection) {
@@ -50,6 +48,7 @@ function end(mode, type, selection) {
 		qm.gainItem(4032389, -1);
 		qm.sendOk("Ahh, so this is the #bKiller Mushroom Spores#k that I was working on in the past. I had a tough time gathering up the ingredients, so I left it in theory only, but he was able to complete it, with a sample to show for as well. Please tell him I appreciate his good work.");
 		qm.forceCompleteQuest();
+		qm.dispose();
 	}
 }
 	

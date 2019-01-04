@@ -1,5 +1,11 @@
+/**
+*	The old dojo mapout portal
+*
+*/
+
 function enter(pi) {
-    pi.playPortalSE();
-    pi.warp(910000000, 0);
-    return false;
+	var loc = pi.getPlayer().getSavedLocation("MIRROR");
+	if(loc != null)pi.warp(loc);
+	else pi.warp(100000000);
+	return true;
 }

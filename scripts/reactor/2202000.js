@@ -20,14 +20,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Real Dollhouse: Drops Pendulum (Quest Item)
--- By ---------------------------------------------------------------------------------------------
-	Lerk
--- Version Info -----------------------------------------------------------------------------------
-	1.0 - First Version by Lerk
----------------------------------------------------------------------------------------------------
+/* @Author Lerk
+ * 
+ * 2202000.js: Real Dollhouse: Drops Pendulum (Quest Item)
 */
 
 function act(){

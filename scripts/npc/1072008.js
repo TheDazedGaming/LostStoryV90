@@ -13,28 +13,28 @@ function start() {
 
 function action(mode,type,selection) {
     if (status == -1) {
-	if (cm.getMapId() == 108000500 || cm.getMapId() == 108000501) {
-	    if (!(cm.haveItem(4031857,15))) {
-		cm.sendNext("Go, and get me 15 #bPotent Wind Crystals#k.");
-		cm.dispose();
-	    } else {
-		status = 2;
-		cm.sendNext("Wow, you have brought me 15 #bPotent Wind Crystals#k! Congratulations. Let me warp you out now.");
-	    }
-	} else if (cm.getMapId() == 108000502 || cm.getMapId() == (108000503)) {
+	if (cm.getMapId() == 108000502) {
 	    if (!(cm.haveItem(4031856,15))) {
-		cm.sendNext("Go, and get me 15 #bPotent Power Crystals#k.");
-		cm.dispose();
+	    	cm.sendNext("Go, and get me 15 #b#z4031856##k.");
+	    	cm.dispose();
 	    } else {
-		status = 2;
-		cm.sendNext("Wow, you have brought me 15 #bPotent Power Crystals#k! Congratulations. Let me warp you out now.");
+	    	status = 2;
+	    	cm.sendNext("Wow, you have brought me 15 #b#z4031856##k! Congratulations. Let me warp you out now.");
+	    }
+	} else if (cm.getMapId() == 108000501) {
+	    if (!(cm.haveItem(4031857,15))) {
+	    	cm.sendNext("Go, and get me 15 #b#z4031857##k.");
+	    	cm.dispose();
+	    } else {
+	    	status = 2;
+	    	cm.sendNext("Wow, you have brought me 15 #b#z4031857##k! Congratulations. Let me warp you out now.");
 	    }
 	} else {
 	    cm.sendNext("Error. Please report this.");
 	    cm.dispose();
 	}
     } else if (status == 2) {
-	cm.warp(120000101,0);
-	cm.dispose();
+    	cm.warp(120000101,0);
+		cm.dispose();
     }
 }

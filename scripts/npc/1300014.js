@@ -1,13 +1,3 @@
-/* ===========================================================
-			Resonance
-	NPC Name: 		SELF
-	Map(s): 		Mushroom Castle: Deep inside Mushroom Forest(106020300)
-	Description: 	Upon reaching the magic barrier.
-=============================================================
-Version 1.0 - Script Done.(18/7/2010)
-=============================================================
-*/
-
 function start() {
     status = -1;
     action(1, 0, 0);
@@ -22,23 +12,33 @@ function action(mode, type, selection) {
         else
             status--;
 		}
-	if(status == 0){
-		if(cm.isQuestActive(2314))
-			cm.PlayerToNpc("This... is a powerful magical barrier that converted #bmushroom spores#k into a powerful form of magic. This cannot be penetrated with brute force. I better report this to #bMinister of Home Affairs#k.");
-		else if(cm.isQuestActive(2322))
-			cm.PlayerToNpc("Right on the surface of the colossal castle wall is a daunting scene of spine vines tangled up on the wall. How in the world am I going to enter the castle? Oh well, I better report this to #b#p1300003##k first.");
-		else {
-			cm.PlayerToNpc("I think I may be able to break the barrier using #t2430014#.");
-			cm.dispose();
+	if (status == 0) {
+		if (cm.getPlayer().getMapId() == 106020300) {
+			if (cm.isQuestStarted(2314)) {
+				cm.sendNext("This looks to be a type of 'Mushroom Spore' that has been transformed by magic into a strong defense barrier. It doesn't appear penetrable through physical force. Return to the #b#p1300003##k and report this matter.", 2);
+			} else if (cm.isQuestStarted(2319)) {
+				cm.sendNext("It seems as if the barrier could be broken using a #t2430014#.");
+			} else {
+                cm.dispose();
+            }
+		} else if (cm.getPlayer().getMapId() == 106020500) {
+			if (cm.isQuestStarted(2322)) {
+				cm.sendNext("The colossal castle wall is covered with thorny vines. It's going to be difficult getting into the castle. For now, go report this to the #b#p1300003##k.", 2);
+			} else {
+                cm.dispose();
+            }
 		}
-	}if(status == 1){
-		if(cm.isQuestActive(2314)){
-			cm.ShowWZEffect("Effect/OnUserEff.img/normalEffect/mushroomcastle/chatBalloon1");
-			cm.forceCompleteQuest(2314);
+	} else if (status == 1){
+		if (cm.isQuestStarted(2314)){
+			//cm.completeQuest(2314);
+			cm.earnTitle("Mushroom Forest Barrier Investigation Completed 1/1");
+			cm.getPlayer().updateQuestInfo(2314, "1");
+			cm.showInfo("Effect/OnUserEff.img/normalEffect/mushroomcastle/chatBalloon1");
 			cm.dispose();
-		} else {
-			cm.playerMessage("Please return to the Minister of Home Affairs and report results.");
+		} else if (cm.getPlayer().getMapId() == 106020500) {
+			cm.earnTitle("Castle Wall Investigation Completed 1/1");
+			cm.getPlayer().updateQuestInfo(2322, "1");
+			cm.dispose();
 		}
 	}
 }
-			

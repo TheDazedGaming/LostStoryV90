@@ -1,30 +1,37 @@
+/*
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/**
+ * @author BubblesDev v83 (Moogra)
+ * @purpose Warps to the Junior Balrog map for the Rush Skill.
+ */
 function enter(pi) {
-    if (pi.getQuestStatus(6110) == 1) {
-	 if (pi.getParty() != null) {
-	     if (!pi.isLeader()) {
-		 pi.playerMessage("Party leader consisting of two Warriors can decide to enter." );
-	     } else {
-		 if (pi.getParty().getMembers().size < 2) {
-		    pi.playerMessage("You can make a quest when you have a party with two. Please make your party with two members." );
-		 } else {
-		      if (!pi.isAllPartyMembersAllowedJob(1)) {
-			  pi.playerMessage("You can't enter. Your party member's job is not Warrior or Your party doesn't consist of two members.");
-		      } else {
-			  var em = pi.getEventManager("4jrush");
-			  if (em == null) {
-			      pi.playerMessage("You're not allowed to enter with unknown reason. Try again." );
-			  } else {
-			      em.startInstance(pi.getParty(), pi.getMap());
-			      return true;
-			  }
-		      }
-		 }
-	     }
-	 } else {
-	     pi.playerMessage(5, "You don...t have a  party. You can challenge with party.");
-	 }
-    } else {
-	pi.playerMessage("You can't enter sealed place.");
-    }
-    return false;
+	if(pi.isQuestStarted(6110)) {
+		pi.warp(910500100, 0);
+		return true;
+ 	}else if(pi.isQuestStarted(6108)){
+   		pi.warp(910500000, 0);
+		return true;
+	} else {
+		pi.getPlayer().message("A mysterious force won't let you in.");
+		return false;
+	}
 }

@@ -8,8 +8,6 @@ Version 1.0 - Script Done.(18/7/2010)
 =============================================================
 */
 
-importPackage(Packages.client);
-
 var status = -1;
 
 function start(mode, type, selection) {
@@ -24,11 +22,15 @@ function start(mode, type, selection) {
 		}
 	}
 	if (status == 0)
-		qm.sendYesNo("Like I told you, just breaking the barrier cannot be a cause for celebration. That's because our castle for the Kingdom of Mushroom completely denies entry of anyone outside our kingdom, so it'll be hard for you to do that. Hmmm... to figure out a way to enter, can you...investigate the outer walls of the castle first?");
+		qm.sendYesNo("Like I told you, we can't be relieved just because the barrier has been broken. The castle of the Mushking Empire is impenetrable from the outside, so it won't be easy for you to enter. First, would you mind investigating the outer walls of the castle?");
 	if (status == 1)
-		qm.sendNext("Walk past the Mushroom Forest and when you reach the #bSplit Road of Choice#k, just walk towards the castle. Good luck.");
+		qm.sendNext("Head over to the castle from the #bSplit Road of Destiny#k, past the Mushroom Forest. Good luck.");
 	if (status == 2){
 		qm.forceStartQuest();
+//		qm.forceStartQuest(2322, "1");
+		//qm.gainExp(11000);
+		//qm.sendOk("Good job navigating through the area.");
+		//qm.forceCompleteQuest();
 		qm.dispose();
 	}
 }
@@ -49,6 +51,7 @@ function end(mode, type, selection) {
 		qm.gainExp(11000);
 		qm.sendOk("Good job navigating through the area.");
 		qm.forceCompleteQuest();
+		qm.dispose();
 	}
 }
 	

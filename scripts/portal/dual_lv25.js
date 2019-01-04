@@ -1,8 +1,5 @@
 function enter(pi) {
-    if (pi.getPlayer().getLevel() >= 25) {
-	pi.warp(103050340,0);
-	pi.playPortalSE();
-    } else {
-	pi.playerMessage(5, "You must be level 25.");
-    }
+	if(pi.isQuestStarted(2366))pi.warp(103050340, "out00");
+	pi.enableActions();
+	return true;
 }

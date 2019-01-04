@@ -15,17 +15,17 @@ function start(mode, type, selection) {
 	    if(type == 1 && mode == 0)
 		    status -= 2;
 		else{
-			//if(status == 0){
+			if(status == 0){
 				qm.sendOk("Really? It's an urgent matter, so if you have some time, please see me.");
 				qm.dispose();
 				return;
-			//} else if(status == 3){
-				//qm.sendNext("Okay. In that case, I'll just give you the routes to the Kingdom of Mushroom. #bNear the west entrance of Henesys,#k you'll find an #bempty house#k. Enter the house, and turn left to enter#b<Themed Dungeon : Mushroom Castle>#k. That's the entrance to the Kingdom of Mushroom. There's not much time!");
-				//qm.forceStartQuest();
-				//return;
+			} else if(status == 3){
+				qm.sendNext("Okay. In that case, I'll just give you the routes to the Kingdom of Mushroom. #bNear the west entrance of Henesys,#k you'll find an #bempty house#k. Enter the house, and turn left to enter#b<Themed Dungeon : Mushroom Castle>#k. That's the entrance to the Kingdom of Mushroom. There's not much time!");
+				qm.forceStartQuest();
+				return;
 			}
 		}
-	//}
+	}
 	if(status == 0) 
 		qm.sendAcceptDecline("Now that you have made the job advancement, you look like you're ready for this. I have something I'd like to ask you for help. Are you willing to listen?");
 	if(status == 1)
@@ -37,6 +37,7 @@ function start(mode, type, selection) {
 	if(status == 4){
 		qm.gainItem(4032375, 1);
 		qm.forceStartQuest();
+		qm.warp(106020000);
 		qm.dispose();
 	}
 }
@@ -58,7 +59,7 @@ function end(mode, type, selection) {
 	if(status == 2){
 		qm.forceCompleteQuest();
 		qm.gainItem(4032375, -1);
-		qm.forceStartQuest(2311);
+		qm.updateQuest(2311, "1");
 		qm.dispose();
 	}
 }

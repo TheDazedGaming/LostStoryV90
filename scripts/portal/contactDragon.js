@@ -1,5 +1,7 @@
+//Author: kevintjuh93
+
 function enter(pi) {
-	pi.playPortalSE();
+	pi.playPortalSound();
 	pi.warp(900090100);
 	return true;
 }

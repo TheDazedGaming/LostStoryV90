@@ -25,11 +25,8 @@
   */
   
 function act() {
+	// How to make the reactor disappear?
     rm.mapMessage(5, "As the light flickers, someone appears out of the light.");
-    rm.spawnNpc(2013001);
-	var em = rm.getEventManager("OrbisPQ");
-	if (em != null) {
-		rm.givePartyExp(6000);
-		em.setProperty("pre", "1");
-	}
+    rm.spawnNpc(2013001, new java.awt.Point(375, 99));
+	rm.getEventManager("OrbisPQ").setProperty("pre", "2");
 }

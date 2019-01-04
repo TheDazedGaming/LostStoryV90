@@ -1,4 +1,5 @@
 function enter(pi) {
-	pi.openNpc(2091005);
-	return true;
+    var loc = pi.getPlayer().getSavedLocation("MIRROR");
+	if(loc != null)pi.warp(loc);
+	else pi.warp(100000000);
 }

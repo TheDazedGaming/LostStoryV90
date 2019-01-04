@@ -1,52 +1,73 @@
-var status = -1;
+/*
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
 
-function action(mode, type, selection) {
-    if (mode == 1) {
-	status++;
-    } else {
-	if (status == 0) {
-	    cm.dispose();
-	}
-	status--;
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/* @Author Jvlaple */
+
+var minLevel = 40;
+var maxLevel = 255;
+var minPlayers = 0;
+var maxPlayers = 6;
+//var minMarried = 6;
+//var minGirls = 1;
+//var minBoys = 1;
+
+function start() {
+    if (cm.getParty() == null) {
+        cm.sendOk("Please come back to me after you've formed a party.");
+        cm.dispose();
+        return;
     }
-		cm.removeAll(4031595);
-		cm.removeAll(4031594);
-		cm.removeAll(4031597);
-    if (status == 0) {
-	cm.sendSimple("#b#L0#Get out of here (no refunds)#l\r\n#L1#My party is ready and we want to go in.#l#k");
-    } else if (status == 1) {
-	if (selection == 0) {
-	    cm.warp(670010000, 0);
-	} else {
-	    if (cm.getPlayer().getParty() == null || !cm.isLeader()) {
-		cm.sendOk("The leader of the party must be here.");
-	    } else {
-		var party = cm.getPlayer().getParty().getMembers();
-		var mapId = cm.getPlayer().getMapId();
-		var next = true;
-		var size = 0;
-		var it = party.iterator();
-		while (it.hasNext()) {
-			var cPlayer = it.next();
-			var ccPlayer = cm.getPlayer().getMap().getCharacterById(cPlayer.getId());
-			if (ccPlayer == null || ccPlayer.getLevel() < 40) {
-				next = false;
-				break;
-			}
-			size += (ccPlayer.isGM() ? 6 : 1);
-		}	
-		if (next && size >= 6) {
-			var em = cm.getEventManager("Amoria");
-			if (em == null) {
-				cm.sendOk("Please try again later.");
-			} else {
-				em.startInstance(cm.getPlayer().getParty(), cm.getPlayer().getMap());
-			}
-		} else {
-			cm.sendOk("All 6+ members of your party must be here.");
-		}
-	    }
-	}
-	cm.dispose();
+    if (!cm.isLeader()) {
+        cm.sendOk("You are not the party leader.");
+        cm.dispose();
+    } else {
+        var party = cm.getParty().getMembers();
+        var next = true;
+        var levelValid = 0;
+        var inMap = 0;
+        if (party.size() < minPlayers || party.size() > maxPlayers)
+            next = false;
+        else {
+            for (var i = 0; i < party.size() && next; i++) {
+                if ((party.get(i).getLevel() >= minLevel) && (party.get(i).getLevel() <= maxLevel))
+                    levelValid++;
+                if (party.get(i).getMapId() == cm.getPlayer().getMapId())
+                    inMap++;
+            }
+            if (levelValid < minPlayers || inMap < minPlayers)
+                next = false;
+        }
+        if (next) {
+            var em = cm.getEventManager("AmoriaPQ");
+            if (em == null) {
+				cm.sendOk("Amoria PQ is under maintenance.");
+                cm.dispose();
+				return;
+			} else
+                em.startInstance(cm.getParty(),cm.getPlayer().getMap());
+            cm.dispose();
+        }
+        else {
+            cm.sendOk("Your party is not a party of six.  Make sure all your members are present and qualified to participate in this quest.  I see #b" + levelValid.toString() + " #kmembers are in the right level range, and #b" + inMap.toString() + "#k are in my map. If this seems wrong, #blog out and log back in,#k or reform the party.");
+            cm.dispose();
+        }
     }
 }

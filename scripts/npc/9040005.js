@@ -1,28 +1,34 @@
-var status = -1;
+/*
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+function start() {
+    cm.sendYesNo("Would you like to exit the Guild Quest?");
+}
 
 function action(mode, type, selection) {
-    if (mode != 1) {
-	cm.sendOk("Good luck on completing the Guild Quest!");
-	cm.dispose();
-	return;
-    }
-status++;
-    if (status == 0) {
-	if (cm.isPlayerInstance()) {
-		cm.sendSimple("What would you like to do? \r\n #L0#Leave the Guild Quest#l");
-	} else {
-		cm.sendOk("Sorry, but I cannot do anything for you!");
-		cm.dispose();
-	}
-    }
-    else if (status == 1) {
-	cm.sendYesNo("Are you sure you want to do that? You won't be able to come back!");
-    }
-    else if (status == 2) {
-	if (cm.isPlayerInstance()) { 
-		cm.getPlayer().getEventInstance().removePlayer(cm.getPlayer());
+	if(mode == 1) {
+		var eim = cm.getPlayer().getEventInstance();
+		if(eim != null) {
+			eim.removePlayer(cm.getPlayer());
+		}
 	}
 	cm.dispose();
-	return;
-    }
 }

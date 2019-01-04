@@ -1,23 +1,52 @@
+/*
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/**
+Rosey (On Train) 2041001
+**/
+
+var status = 0;
+
 function start() {
-    status = -1;
     action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    status++;
-    if(mode == 0) {
-	cm.sendOk("You'll get to your destination in moment. Go ahead and talk to other people, and before you know it, you'll be there already.");
-	cm.dispose();
-	return;
-    }
-    if(status == 0) {
-	cm.sendYesNo("Do you want to leave the waiting room? You can, but the ticket is NOT refundable. Are you sure you still want to leave this room?");
-    } else if(status == 1) {
-	if (cm.getMapId() == 220000111) {
-	    cm.warp(220000110, 0);
-	} else {
-	    cm.warp(200000121, 0);
-	}
-	cm.dispose();
+    if (status == 0) {
+        cm.sendYesNo("Do you wish to leave the train?");
+        status++;
+    } else {
+        if ((status == 1 && type == 1 && selection == -1 && mode == 0) || mode == -1) {
+            cm.dispose();
+        } else {
+            if (status == 1) {
+                cm.sendNext ("Alright, see you next time. Take care.");
+                status++;
+            } else if (status == 2) {
+                if (cm.getPlayer().getMapId() == 200000122)
+                    cm.warp(200000121, 0);// back to orbis
+                else
+                    cm.warp(220000110,0);// back to Ludi
+                cm.dispose();
+            }
+        }
     }
 }

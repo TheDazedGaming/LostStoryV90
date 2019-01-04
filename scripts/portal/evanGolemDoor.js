@@ -1,9 +1,5 @@
 function enter(pi) {
-    if (pi.isQuestActive(22557)) {
-	pi.forceCompleteQuest(22557);
-	pi.playerMessage(5, "Camilla rescued!");
-	pi.getPlayer().gainSP(1);
-    }
-    pi.warp(106010102,0);
-    pi.playPortalSE();
+	/*if(pi.isQuestStarted(22556) || pi.isQuestStarted(22557) || pi.isQuestStarted(22559))*/pi.warp(106010102, "out00");
+	pi.enableActions();
+	return true;
 }

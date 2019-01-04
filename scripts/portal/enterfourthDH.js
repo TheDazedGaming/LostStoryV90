@@ -1,14 +1,18 @@
 function enter(pi) {
-    if (pi.getQuestStatus(20611) == 1 || pi.getQuestStatus(20612) == 1 || pi.getQuestStatus(20613) == 1 || pi.getQuestStatus(20614) == 1 || pi.getQuestStatus(20615) == 1) {
-	if (pi.getPlayerCount(913020300) == 0) {
-	    var map = pi.getMap(913020300);
-	    map.killAllMonsters(false);
-	    map.respawn(true);
-	    pi.warp(913020300, 0);
-	} else {
-	    pi.playerMessage("Someone is already attempting to defeat the boss. Better come back later.");
+	if (pi.hasItem(4032125) || pi.hasItem(4032126) || pi.hasItem(4032127) || pi.hasItem(4032128) || pi.hasItem(4032129)) {
+		 pi.playerMessage(5, "You already have the proof of ability.");
+		 return false;
 	}
-    } else {
-	pi.playerMessage("Hall #4 is only available to those that are training for Level 110 skill.");
+    if (pi.isQuestStarted(20611) || pi.isQuestStarted(20612) || pi.isQuestStarted(20613) || pi.isQuestStarted(20614) || pi.isQuestStarted(20615)) {
+		if (pi.getPlayerCount(913020300) == 0) {
+		    var map = pi.getMap(913020300);
+		    map.killAllMonsters();
+		    pi.warp(913020300, 0);
+		    pi.spawnMonster(9300294, 87,88);
+		} else {
+		    pi.playerMessage(5, "Someone is already attempting to defeat the boss. Better come back later.");
+		}
+	    } else {
+		pi.playerMessage(5, "You cannot access this hall.");
     }
 }

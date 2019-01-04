@@ -1,8 +1,11 @@
-function enter(pi) {
-	if (pi.getEvanIntroState("dt00=o;mo00=o")) {
-		return false;
+//Author: kevintjuh93
+
+function enter(pi) {  
+	pi.blockPortal();
+	if (pi.containsAreaInfo(22013, "dt00=o")) {
+	    return false;
 	}
-	pi.updateEvanIntroState("dt00=o;mo00=o");
-	pi.showMapEffect("evan/dragonTalk00");
+	pi.mapEffect("evan/dragonTalk00");
+	pi.updateAreaInfo(22013, "dt00=o;mo00=o");
 	return true;
-}
+}  

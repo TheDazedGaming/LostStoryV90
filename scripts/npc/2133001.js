@@ -1,44 +1,54 @@
+/**
+ * @NPC: Ellin
+ * @MapID: 930000100
+*/
+
 var status = -1;
 
+function start(){
+	status = -1;
+	action(1, 0, 0);
+}
+
 function action(mode, type, selection) {
-    if (mode == 1) {
-	status++;
-    } else {
-	status--;
-    }
-    switch(cm.getPlayer().getMapId()) {
-	case 930000000:
-	    cm.sendNext("Welcome. Please enter the portal.");
-	    break;
-	case 930000100:
-	    cm.sendNext("We have to eliminate all these contaminated monsters!");
-	    break;
-	case 930000200:
-	    cm.sendNext("We have to eliminate all these contaminated reactors!");
-	    break;
-	case 930000300:
-	    cm.warpParty(930000400);
-	    break;
-	case 930000400:
-	    if (cm.haveItem(4001169,20)) {
-		cm.warpParty(930000500);
-		cm.gainItem(4001169,-20);
-	    } else if (!cm.haveItem(2270004)) {
-		cm.gainItem(2270004,10);
-		cm.sendOk("Good luck in purifying these monsters!");
-	    } else {
-		cm.sendOk("We have to purify all these contaminated monsters! Get me 20 Monster Marbles from them!");
-	    }
-	    break;
-	case 930000600:
-	    cm.sendNext("This is it! Place the Magic Stone on the Altar!");
-	    break;
-	case 930000700:
-	    cm.removeAll(4001163);
-	    cm.removeAll(4001169);
-	    cm.removeAll(2270004);
-	    cm.warp(930000800,0);
-	    break;
-    }
-    cm.dispose();
+    if (mode < 0 || (status == 0 && mode == 0)){
+        cm.dispose();
+		return;
+	}
+	if (mode == 1)
+		status++;
+	else
+		status--;
+	
+	if(cm.getPlayer().getMapId() == 930000300){
+		cm.warpParty(cm.getPlayer().getMapId() + 100);
+		cm.dispose();
+	}else if(cm.getPlayer().getMapId() == 930000400){
+		if(status == 0){
+			var text = "";
+			if(cm.isLeader()){
+				text += "#L0#Give me a Purification Marble.#l\r\n";
+				text += "#L1#How do I get them in the marble?#l\r\n";
+			}
+			text += "#L2#I want to get out of here.#l";
+			cm.sendNext(text);
+		}else if(status == 1){
+			if(selection == 0){
+				cm.gainItem(2270004, 10);
+				cm.dispose();
+			}else if(selection ==1){
+				cm.dispose();
+			}else if(selection == 2){
+				cm.warp(300030100);
+				cm.dispose();
+			}
+		}
+	}else{
+		if(status == 0){
+			cm.sendYesNo("Would you like to leave the Party Quest?");
+		}else if(status == 1){
+			cm.warp(300030100);
+			cm.dispose();
+		}
+	}
 }

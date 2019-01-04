@@ -8,8 +8,6 @@ Version 1.0 - Script Done.(18/7/2010)
 =============================================================
 */
 
-importPackage(Packages.client);
-
 var status = -1;
 
 function start(mode, type, selection) {
@@ -29,7 +27,12 @@ function start(mode, type, selection) {
 		qm.sendNext("You'll run into the barrier at the Mushroom Forest by heading east of where you are standing right now. Please be careful. I hear that the area is infested with crazy, fear-inducing monsters.");
 	if(status == 2){
 		qm.forceStartQuest();
+//		qm.forceStartQuest(2314,"1");
 		qm.dispose();
+		//qm.gainExp(8300);
+		//qm.sendOk("I see, so it was indeed not a regular barrier by any means. Great work there. If not for you help, we wouldn't have had a clue as to what that was all about.");
+		//qm.forceCompleteQuest(); 
+//		qm.dispose();
 	}
 }
 

@@ -1,12 +1,3 @@
-/* ===========================================================
-			Resonance
-	NPC Name: 		Killer Mushroom Spore
-	Map(s): 		Mushroom Castle: Deep inside Mushroom Forest(106020300)
-	Description: 	Breaking the Barrier
-=============================================================
-Version 1.0 - Script Done.(18/7/2010)
-=============================================================
-*/
 
 function start() {
     status = -1;
@@ -18,8 +9,6 @@ function action(mode, type, selection) {
         cm.dispose();
     } else {
 		if(status == 0 && mode == 0){
-			cm.sendNext("You have canceled the use of the item.");
-			cm.gainItem(2430014, 1);
 			cm.dispose();
 		}
 		if (mode == 1)
@@ -28,12 +17,21 @@ function action(mode, type, selection) {
             status--;
 		}
 	if(status == 0){
-		cm.sendYesNo("Are you going to use the #bKiller Mushroom Spore#k?....#e#r* Take Note#n..Please do not apply directly on the body!..If swallowed, please see the nearest doctor!");
-	}if(status == 1)
-		cm.PlayerToNpc("Awesome, the barrier is broken!!!");
-	if(status == 2){
-		cm.playerMessage("The Mushroom Forest Barrier has been removed, and penetrated.");
+		cm.sendYesNo("#bDo you want to use the Killer Mushroom Spore? \r\n\r\n#r#e<Caution>#n\r\nNot for human consumption!\r\nIf ingested, seek medical attention immediately!");
+	} else if(status == 1)
+        if(cm.getMapId() == 106020300)
+            cm.sendNext("Success! The barrier is broken!");
+        else {
+            cm.sendOk("It doesn't look like there's anything to use the Killer Mushroom Spore on around here!");
+            cm.dispose();
+        }
+	else if(status == 2){
+		cm.earnTitle("Mushroom Forest Barrier Removal Complete 1/1");
+		cm.getPlayer().dropMessage(5, "The Mushroom Forest Barrier has been removed.");
+		cm.gainItem(2430014, -1);
+        cm.completeQuest(2343);
 		cm.dispose();
-	}
+	} else {
+        cm.dispose();
+    }
 }
-			

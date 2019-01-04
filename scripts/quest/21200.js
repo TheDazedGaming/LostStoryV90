@@ -1,74 +1,82 @@
+/*
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 var status = -1;
 
 function start(mode, type, selection) {
-    if (mode == 1) {
-	status++;
-    } else {
-	if (status == 0) {
-	    qm.sendNext("It's really urgent, and you'll regret it if you refuse to. #bIt has something to do with your pole arm,#k which means it has to do with your past. Who knows...? Maybe the pole arm is key to reawakening your abilities...?");
-	    qm.dispose();
-	    return;
-	}
-	status--;
+    status++;
+    if (mode != 1){
+        if (mode == 0 && type == 12)
+            qm.sendNext("Come back again when you have took your desition wisely.");
+        qm.dispose();
+        return;
     }
-    if (status == 0) {
-	qm.askAcceptDecline("How's the training going? Wow, looking at you, I can tell your levels have shot through the roof. That's amazing... well, anyway, I see that you'r busy, but you'll have to return to the island for a bit.");
-    } else if (status == 1) {
-	qm.forceStartQuest(21200, "3"); //??
-	qm.forceCompleteQuest();
-	qm.forceStartQuest(21202); //skip just in case
-	qm.forceStartQuest(21203, "0");
-	qm.sendOk("Your #bGiant Pole Arm#k that's being kept in #bRien#k is acting strange all of a sudden. According to the book, the pole arm reacts like this when it's calling for its master. #bMaybe it's calling for you?#k? Please come back to the island and find out.");
-	qm.dispose();
+    if(status == 0)
+        qm.sendAcceptDecline("How is the training going? Wow, you've reached such a high level! That's amazing. I knew you would do just fine on Victoria Island... Oh, look at me. I'm wasting your time. I know you're busy, but you'll have to return to the island for a bit.");
+    else if(status == 1){
+        qm.sendOk("Your #b#p1201001##k in #b#m140000000##k is acting strange all of a sudden. According to the records, the Polearm acts this way when it is calling for its master. #bPerhaps it's calling for you#k. Please return to the island and check things out.");
+        qm.startQuest();
+        qm.dispose();
     }
 }
 
 function end(mode, type, selection) {
-    if (mode == 1) {
-	status++;
-    } else {
-	if (status == 11) {
-	    qm.sendNext("Hey, at least you tell me you tried!");
-	    qm.dispose();
-	    return;
-	} else if (status == 13) {
-	    qm.MovieClipIntroUI(true);
-	    qm.warp(914090200, 0);
-	    qm.dispose();
-	    return;
-	}
-	status--;
+    status++;
+    if (mode != 1){
+        if (mode == 0 && type == 1)
+            qm.sendNext("Hey! At least say you tried!");
+        qm.dispose();
+        return;
     }
-    if (status == 0) {
-	qm.sendNextS("Hmmmmmm mmmm mmmmm....", 2);
-    } else if (status == 1) {
-	qm.sendNextPrevS("#b(Giant Pole Arm is buzzing, but who's that boy standing there?)#k", 2);
-    } else if (status == 2) {
-	qm.sendNextPrevS("#b(I've never met him before. He doesn't look human.)#k", 2);
-    } else if (status == 3) {
-	qm.sendNextPrev("Hey Aran! Do you still not hear me? Seriously, can't you hear me? Ahhh, this is frustrating!");
-    } else if (status == 4) {
-	qm.sendNextPrevS("#b(Whoa, who was that? Sounds like an angry boy...)#k", 2);
-    } else if (status == 5) {
-	qm.sendNextPrev("Seriously, the one master I had turned out to be trapped in ice for hundreds of years, abandoning the weapon, and now the 'master' can't even hear me?");
-    } else if (status == 6) {
-	qm.sendNextPrevS("Who are you?", 2);
-    } else if (status == 7) {
-	qm.sendNextPrev("Aran? Do you hear me now? It's me, it's me! I'm your weapon #bMaha the pole arm!#k!");
-    } else if (status == 8) {
-	qm.sendNextPrevS("#b(...Maha? Giant pole Arm actually talks?)#k", 2);
-    } else if (status == 9) {
-	qm.sendNextPrev("Why do you have that look on your face like you can't believe it? I see that you have lost all your memories, but... did you also forget about me? How can you do that to me??");
-    } else if (status == 10) {
-	qm.sendNextPrevS("I'm sorry, but seriously... I don't remember a thing.", 2);
-    } else if (status == 11) {
-	qm.sendYesNo("Is that all you can say after all those years? I'm sorry? Do you understand how bored I was all by myself for hundreds of years? Bring it out if you can. Bring your memories out! Bring them all out! Dig them up if you need to!");
-    } else if (status == 12) {
-	qm.sendNextS("#b(The voice that claims to be Maha the Giant Pole Arm seem quite perturbed. This conversation is going nowhere. I better talk to Lirin first.)#k", 2);
-	qm.forceCompleteQuest();
-    } else if (status == 13) {
-	qm.sendYesNo("Would you like to skip the video clip?  Even if you skip the scene, game play will not be affected.");
-    } else if (status == 14) {
-	qm.dispose();
+    if (status == 0)
+        qm.sendNext("Voom voom voom voom voom...."); //Giant Polearm
+    else if (status == 1)
+        qm.sendNextPrev("#b(The #p1201001# is producing an undulating echo. But who is that boy standing over there?)", 2);
+    else if (status == 2)
+        qm.sendNextPrev("#b(You've never seen him before. He doesn't look human.)", 2);
+    else if (status == 3)
+        qm.sendNextPrev("Yo, Aran! Do you not hear me? I said, do you not hear me! Ugh, how frustating!");
+    else if (status == 4)
+        qm.sendNextPrev("#b(Hm? Who's voice was that? It sounds like an angry boy...)", 2);
+    else if (status == 5)
+        qm.sendNextPrev("Ugh, my only master had to end up trapped in ice for hundreds of years, abandoning me completeley, and is now completely ignoring me.");
+    else if (status == 6)
+        qm.sendNextPrev("Who...are you?", 2);
+    else if (status == 7)
+        qm.sendNextPrev("Aran? Do you hear me now? It's me! Don't you recognize me? I'm your weapon, #b#p1201002# the Polearm#k!");
+    else if (status == 8)
+        qm.sendNextPrev("#b(...#p1201002#? A #p1201001# can talk?)", 2);
+    else if (status == 9)
+        qm.sendNextPrev("What's with that suspicious look on your face? I know you've lost your memory, but did you forgot about me, too? How could you?!");
+    else if (status == 10)
+        qm.sendNextPrev("I'm so sorry, but I can't remember a thing.", 2);
+    else if (status == 11)
+        qm.sendYesNo("Sorry doesn't cut it! Do you know how lonely and bored I was for hundreds of years? I don't care what it takes! Remember me! Remember me now!");
+    else if (status == 12){
+        qm.completeQuest();
+        qm.sendNext("#b(The voice that claims to be #p1201002# the #p1201001# is yelling in frustration. You don't think this conversation is going anywhere. You better go talk to #p1201000# first.)", 2);
+        //qm.sendNoExit("#b(The voice that claims to be #p1201002# the #p1201001# is yelling in frustration. You don't think this conversation is going anywhere. You better go talk to #p1201000# first.)", true);
+    }else if (status == 13){
+        //qm.showVideo("Maha");
+        qm.dispose();
     }
 }

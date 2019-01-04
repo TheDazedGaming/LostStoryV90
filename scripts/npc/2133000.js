@@ -1,65 +1,73 @@
+/**
+ * @NPC: Ellin
+ * @MapID: 300030100
+ * Leaves Ellin Forest PQ
+*/
+
 var status = -1;
 
+var minPlayers = 1;//4
+
+var minLevel = 1;//44
+var maxLevel = 200;//55
+
+function start(){
+	status = -1;
+	action(1, 0, 0);
+}
+
 function action(mode, type, selection) {
-    if (mode == 1) {
-	status++;
-    } else {
-	if (status == 0) {
-	    cm.dispose();
+    if (mode < 0 || (status == 0 && mode == 0)){
+        cm.dispose();
+		return;
 	}
-	status--;
-    }
-    if (status == 0) {
-	    cm.removeAll(4001163);
-	    cm.removeAll(4001169);
-	    cm.removeAll(2270004);
-	cm.sendSimple("#b#L0#Give me Altaire Earrings.#l\r\n#L1#Give me Glittering Altaire Earrings.#l\r\n#L2#Attempt Forest of Poison Haze.#l#k");
-    } else if (status == 1) {
-	if (selection == 0) {
-	    if (!cm.haveItem(1032060) && cm.haveItem(4001198, 20)) {
-		cm.gainItem(1032060,1);
-		cm.gainItem(4001198, -20);
-	    } else {
-		cm.sendOk("You either have Altair Earrings already or you do not have 20 Altair Fragments");
-	    }
-	} else if (selection == 1){
-	    if (cm.haveItem(1032060) && !cm.haveItem(1032061) && cm.haveItem(4001198, 30)) {
-		cm.gainItem(1032060,-1);
-		cm.gainItem(1032061, 1);
-		cm.gainItem(4001198, -30);
-	    } else {
-		cm.sendOk("You either don't have Altair Earrings already or you do not have 30 Altair Fragments");
-	    }
-	} else if (selection == 2) {
-	    if (cm.getPlayer().getParty() == null || !cm.isLeader()) {
-		cm.sendOk("The leader of the party must be here.");
-	    } else {
-		var party = cm.getPlayer().getParty().getMembers();
-		var mapId = cm.getPlayer().getMapId();
-		var next = true;
-		var size = 0;
-		var it = party.iterator();
-		while (it.hasNext()) {
-			var cPlayer = it.next();
-			var ccPlayer = cm.getPlayer().getMap().getCharacterById(cPlayer.getId());
-			if (ccPlayer == null || ccPlayer.getLevel() < 45 || ccPlayer.getJob() > 900 || ccPlayer.getLevel() > 200) {
-				next = false;
-				break;
-			}
-			size += (ccPlayer.isGM() ? 4 : 1);
-		}	
-		if (next && size >= 4) {
-			var em = cm.getEventManager("Ellin");
-			if (em == null) {
-				cm.sendOk("Please try again later.");
-			} else {
-				em.startInstance(cm.getPlayer().getParty(), cm.getPlayer().getMap());
-			}
-		} else {
-			cm.sendOk("All 4+ adventurer-only members of your party must be here and above level 45.");
+	if (mode == 1)
+		status++;
+	else
+		status--;
+	
+	var eventManager = cm.getEventManager("EllinForest");
+	if (eventManager == null || eventManager != null) {//disabled
+		cm.sendOk("Ellin Forest is currently unavailable.");
+		cm.dispose();
+		return;
+	}
+	
+	if (cm.getPlayer().getParty() == null) {
+		cm.sendOk("If you would like to participate in Ellin Forest PQ please enter a party.");
+		cm.dispose();
+		return;
+	}else if (!cm.isLeader() && cm.getPlayer().getMapId() == exitMap) {
+		cm.sendOk("Please tell your party leader to speak with me.");
+		cm.dispose();
+		return;
+	}
+	var players = cm.getPlayer().getParty().getMembers();
+	
+	if(players.size() < minPlayers){
+		cm.sendOk("You need atleast 4 players to do Ellin Forest PQ");
+		cm.dispose();
+		return;
+	}
+	
+	for (var i = 0; i < players.size(); i++){
+		var player = players.get(i);
+		if(player.getLevel() < minLevel || player.getLevel() > maxLevel){
+			cm.sendOk("Please make sure everyone in your party is in level range.");
+			cm.dispose();
+			return;
 		}
-	    }
 	}
-	cm.dispose();
-    }
+	
+	if(cm.getPlayer().getMapId() == 300030100){
+		if(status == 0){
+			var eim = eventManager.getInstance("EF");
+			if(eim == null){
+				eventManager.startInstance(cm.getPlayer().getParty(), cm.getPlayer().getMap());
+			}else{
+				cm.sendOk("Another Party is already in the Ellin Forest PQ.");
+			}
+			cm.dispose();
+		}
+	}
 }

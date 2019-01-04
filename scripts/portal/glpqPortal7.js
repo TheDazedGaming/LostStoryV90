@@ -1,4 +1,10 @@
+/**
+ *	@Modified: iPoopMagic (David)
+ */
+
 function enter(pi) {
 	pi.warp(610030800, 0);
-	pi.gainNX(4000);
+    if (pi.getPlayer().getEventInstance() != null && pi.getPlayer().getEventInstance().getName().startsWith("CWKPQ")) {
+//		pi.gainNX(4000);
+    }
 }

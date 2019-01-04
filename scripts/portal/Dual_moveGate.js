@@ -1,4 +1,4 @@
 function enter(pi) {
-	pi.warp(103050000, "out00");
+	pi.warp(103050000, 0);
 	return true;
 }

@@ -27,5 +27,5 @@
 */
 
 function act(){
-	rm.spawnMonster(9300090);
+    rm.spawnMonster(9300090);
 }

@@ -1,8 +1,9 @@
 function enter(pi) {
-	if(pi.isQuestActive(22010) || pi.getPlayer().getJob() != 2001) {
+	if(pi.isQuestStarted(22010) || pi.getPlayer().getJob().getId() != 2001) {
 		pi.warp(100030310);
 	} else {
-		pi.playerMessage("Cannot enter the Lush Forest without a reason.");
+		pi.playerMessage(5, "Cannot enter the Lush Forest without a reason.");
 	}
+	pi.enableActions();
 	return true;
 }

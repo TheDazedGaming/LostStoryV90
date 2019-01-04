@@ -8,8 +8,6 @@ Version 1.0 - Script Done.(18/7/2010)
 =============================================================
 */
 
-importPackage(Packages.client);
-
 var status = -1;
 
 function start(mode, type, selection) {
@@ -48,6 +46,7 @@ function end(mode, type, selection) {
 		qm.gainExp(2500);
 		qm.sendOk("The problem now is to figure out how to enter the castle.");
 		qm.forceCompleteQuest();
+		qm.dispose();
 	}
 }
 	

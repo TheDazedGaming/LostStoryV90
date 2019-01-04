@@ -20,17 +20,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Fake Dollhouse: Returns player to Eos Tower 100th Floor[221024400]
--- By ---------------------------------------------------------------------------------------------
-	Lerk
--- Version Info -----------------------------------------------------------------------------------
-	1.0 - First Version by Lerk
----------------------------------------------------------------------------------------------------
-**/
+/* @Author Lerk
+ * 
+ * 2200000.js: Fake Dollhouse: Returns player to Eos Tower 100th Floor [221024400]
+*/
 
 function act(){
-	rm.playerMessage("You will be expelled from this map by an unknown force.");
-	rm.warp(221024400, 4);
+    rm.playerMessage(5, "Gotcha! Try again next time!");
+    rm.warp(221024400);
 }

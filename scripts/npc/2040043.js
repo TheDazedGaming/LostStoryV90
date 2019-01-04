@@ -1,271 +1,167 @@
 /*
-	Blue Balloon - LudiPQ 8th stage NPC
-*/
+ This file is part of the OdinMS Maple Story Server
+ Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+ Matthias Butz <matze@odinms.de>
+ Jan Christian Meyer <vimes@odinms.de>
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as
+ published by the Free Software Foundation version 3 as published by
+ the Free Software Foundation. You may not use, modify or distribute
+ this program under any other version of the GNU Affero General Public
+ License.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+ 
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+/*
+ @	Author : Twdtwd
+ @	Modified: iPoopMagic (David)
+ @	NPC = Blue Balloon
+ @	Map = Hidden-Street <Stage 8>
+ @	NPC MapId = 922010800
+ @	Function = LPQ - 8 Stage
+ @
+ @	Description: Used to find the combo to unlock the next door. Players stand on 5 different crates to guess the combo.
+ */
 
-var status;
-var partyLdr;
-var chatState;
+var status = 0;
 var party;
 var preamble;
-
-var stage8combos = Array(Array(0, 0, 0, 0, 1, 1, 1, 1, 1),
-    Array(0, 0, 0, 1, 0, 1, 1, 1, 1),
-    Array(0, 0, 0, 1, 1, 0, 1, 1, 1),
-    Array(0, 0, 0, 1, 1, 1, 0, 1, 1),
-    Array(0, 0, 0, 1, 1, 1, 1, 0, 1),
-    Array(0, 0, 0, 1, 1, 1, 1, 1, 0),
-    Array(0, 0, 1, 0, 0, 1, 1, 1, 1),
-    Array(0, 0, 1, 0, 1, 0, 1, 1, 1),
-    Array(0, 0, 1, 0, 1, 1, 0, 1, 1),
-    Array(0, 0, 1, 0, 1, 1, 1, 0, 1),
-    Array(0, 0, 1, 0, 1, 1, 1, 1, 0),
-    Array(0, 0, 1, 1, 0, 0, 1, 1, 1),
-    Array(0, 0, 1, 1, 0, 1, 0, 1, 1),
-    Array(0, 0, 1, 1, 0, 1, 1, 0, 1),
-    Array(0, 0, 1, 1, 0, 1, 1, 1, 0),
-    Array(0, 0, 1, 1, 1, 0, 0, 1, 1),
-    Array(0, 0, 1, 1, 1, 0, 1, 0, 1),
-    Array(0, 0, 1, 1, 1, 0, 1, 1, 0),
-    Array(0, 0, 1, 1, 1, 1, 0, 0, 1),
-    Array(0, 0, 1, 1, 1, 1, 0, 1, 0),
-    Array(0, 0, 1, 1, 1, 1, 1, 0, 0),
-    Array(0, 1, 0, 0, 0, 1, 1, 1, 1),
-    Array(0, 1, 0, 0, 1, 0, 1, 1, 1),
-    Array(0, 1, 0, 0, 1, 1, 0, 1, 1),
-    Array(0, 1, 0, 0, 1, 1, 1, 0, 1),
-    Array(0, 1, 0, 0, 1, 1, 1, 1, 0),
-    Array(0, 1, 0, 1, 0, 0, 1, 1, 1),
-    Array(0, 1, 0, 1, 0, 1, 0, 1, 1),
-    Array(0, 1, 0, 1, 0, 1, 1, 0, 1),
-    Array(0, 1, 0, 1, 0, 1, 1, 1, 0),
-    Array(0, 1, 0, 1, 1, 0, 0, 1, 1),
-    Array(0, 1, 0, 1, 1, 0, 1, 0, 1),
-    Array(0, 1, 0, 1, 1, 0, 1, 1, 0),
-    Array(0, 1, 0, 1, 1, 1, 0, 0, 1),
-    Array(0, 1, 0, 1, 1, 1, 0, 1, 0),
-    Array(0, 1, 0, 1, 1, 1, 1, 0, 0),
-    Array(0, 1, 1, 0, 0, 0, 1, 1, 1),
-    Array(0, 1, 1, 0, 0, 1, 0, 1, 1),
-    Array(0, 1, 1, 0, 0, 1, 1, 0, 1),
-    Array(0, 1, 1, 0, 0, 1, 1, 1, 0),
-    Array(0, 1, 1, 0, 1, 0, 0, 1, 1),
-    Array(0, 1, 1, 0, 1, 0, 1, 0, 1),
-    Array(0, 1, 1, 0, 1, 0, 1, 1, 0),
-    Array(0, 1, 1, 0, 1, 1, 0, 0, 1),
-    Array(0, 1, 1, 0, 1, 1, 0, 1, 0),
-    Array(0, 1, 1, 0, 1, 1, 1, 0, 0),
-    Array(0, 1, 1, 1, 0, 0, 0, 1, 1),
-    Array(0, 1, 1, 1, 0, 0, 1, 0, 1),
-    Array(0, 1, 1, 1, 0, 0, 1, 1, 0),
-    Array(0, 1, 1, 1, 0, 1, 0, 0, 1),
-    Array(0, 1, 1, 1, 0, 1, 0, 1, 0),
-    Array(0, 1, 1, 1, 0, 1, 1, 0, 0),
-    Array(0, 1, 1, 1, 1, 0, 0, 0, 1),
-    Array(0, 1, 1, 1, 1, 0, 0, 1, 0),
-    Array(0, 1, 1, 1, 1, 0, 1, 0, 0),
-    Array(0, 1, 1, 1, 1, 1, 0, 0, 0),
-    Array(1, 0, 0, 0, 0, 1, 1, 1, 1),
-    Array(1, 0, 0, 0, 1, 0, 1, 1, 1),
-    Array(1, 0, 0, 0, 1, 1, 0, 1, 1),
-    Array(1, 0, 0, 0, 1, 1, 1, 0, 1),
-    Array(1, 0, 0, 0, 1, 1, 1, 1, 0),
-    Array(1, 0, 0, 1, 0, 0, 1, 1, 1),
-    Array(1, 0, 0, 1, 0, 1, 0, 1, 1),
-    Array(1, 0, 0, 1, 0, 1, 1, 0, 1),
-    Array(1, 0, 0, 1, 0, 1, 1, 1, 0),
-    Array(1, 0, 0, 1, 1, 0, 0, 1, 1),
-    Array(1, 0, 0, 1, 1, 0, 1, 0, 1),
-    Array(1, 0, 0, 1, 1, 0, 1, 1, 0),
-    Array(1, 0, 0, 1, 1, 1, 0, 0, 1),
-    Array(1, 0, 0, 1, 1, 1, 0, 1, 0),
-    Array(1, 0, 0, 1, 1, 1, 1, 0, 0),
-    Array(1, 0, 1, 0, 0, 0, 1, 1, 1),
-    Array(1, 0, 1, 0, 0, 1, 0, 1, 1),
-    Array(1, 0, 1, 0, 0, 1, 1, 0, 1),
-    Array(1, 0, 1, 0, 0, 1, 1, 1, 0),
-    Array(1, 0, 1, 0, 1, 0, 0, 1, 1),
-    Array(1, 0, 1, 0, 1, 0, 1, 0, 1),
-    Array(1, 0, 1, 0, 1, 0, 1, 1, 0),
-    Array(1, 0, 1, 0, 1, 1, 0, 0, 1),
-    Array(1, 0, 1, 0, 1, 1, 0, 1, 0),
-    Array(1, 0, 1, 0, 1, 1, 1, 0, 0),
-    Array(1, 0, 1, 1, 0, 0, 0, 1, 1),
-    Array(1, 0, 1, 1, 0, 0, 1, 0, 1),
-    Array(1, 0, 1, 1, 0, 0, 1, 1, 0),
-    Array(1, 0, 1, 1, 0, 1, 0, 0, 1),
-    Array(1, 0, 1, 1, 0, 1, 0, 1, 0),
-    Array(1, 0, 1, 1, 0, 1, 1, 0, 0),
-    Array(1, 0, 1, 1, 1, 0, 0, 0, 1),
-    Array(1, 0, 1, 1, 1, 0, 0, 1, 0),
-    Array(1, 0, 1, 1, 1, 0, 1, 0, 0),
-    Array(1, 0, 1, 1, 1, 1, 0, 0, 0),
-    Array(1, 1, 0, 0, 0, 0, 1, 1, 1),
-    Array(1, 1, 0, 0, 0, 1, 0, 1, 1),
-    Array(1, 1, 0, 0, 0, 1, 1, 0, 1),
-    Array(1, 1, 0, 0, 0, 1, 1, 1, 0),
-    Array(1, 1, 0, 0, 1, 0, 0, 1, 1),
-    Array(1, 1, 0, 0, 1, 0, 1, 0, 1),
-    Array(1, 1, 0, 0, 1, 0, 1, 1, 0),
-    Array(1, 1, 0, 0, 1, 1, 0, 0, 1),
-    Array(1, 1, 0, 0, 1, 1, 0, 1, 0),
-    Array(1, 1, 0, 0, 1, 1, 1, 0, 0),
-    Array(1, 1, 0, 1, 0, 0, 0, 1, 1),
-    Array(1, 1, 0, 1, 0, 0, 1, 0, 1),
-    Array(1, 1, 0, 1, 0, 0, 1, 1, 0),
-    Array(1, 1, 0, 1, 0, 1, 0, 0, 1),
-    Array(1, 1, 0, 1, 0, 1, 0, 1, 0),
-    Array(1, 1, 0, 1, 0, 1, 1, 0, 0),
-    Array(1, 1, 0, 1, 1, 0, 0, 0, 1),
-    Array(1, 1, 0, 1, 1, 0, 0, 1, 0),
-    Array(1, 1, 0, 1, 1, 0, 1, 0, 0),
-    Array(1, 1, 0, 1, 1, 1, 0, 0, 0),
-    Array(1, 1, 1, 0, 0, 0, 0, 1, 1),
-    Array(1, 1, 1, 0, 0, 0, 1, 0, 1),
-    Array(1, 1, 1, 0, 0, 0, 1, 1, 0),
-    Array(1, 1, 1, 0, 0, 1, 0, 0, 1),
-    Array(1, 1, 1, 0, 0, 1, 0, 1, 0),
-    Array(1, 1, 1, 0, 0, 1, 1, 0, 0),
-    Array(1, 1, 1, 0, 1, 0, 0, 0, 1),
-    Array(1, 1, 1, 0, 1, 0, 0, 1, 0),
-    Array(1, 1, 1, 0, 1, 0, 1, 0, 0),
-    Array(1, 1, 1, 0, 1, 1, 0, 0, 0),
-    Array(1, 1, 1, 1, 0, 0, 0, 0, 1),
-    Array(1, 1, 1, 1, 0, 0, 0, 1, 0),
-    Array(1, 1, 1, 1, 0, 0, 1, 0, 0),
-    Array(1, 1, 1, 1, 0, 1, 0, 0, 0),
-    Array(1, 1, 1, 1, 1, 0, 0, 0, 0));
+var gaveItems;
+var nthtext = "8th";
 
 function start() {
     status = -1;
-    preamble = null;
     action(1, 0, 0);
 }
 
+function generateCombo() {
+    var countPicked = 0;
+    var positions = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var indices = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    while (countPicked < 5) { //this avoids extra looping, it loops exactly 5 times.
+        var picked = Math.floor(Math.random() * indices.length);
+        positions[indices[picked]] = 1;
+        indices.slice(picked, 1); //this might have a toll in performance, don't think it's significant tho, most prolly not even noticeable.
+        
+        countPicked++;
+    }
+//    while (countPicked < 5) { //ori, this can loop more than 5 times (the most likely scenario), it can theorically loop infinite amount of times?
+//        var picked = Math.floor(Math.random() * positions.length);
+//        if (positions[picked] === 1) // Don't let it pick one its already picked.
+//            continue;
+//
+//        positions[picked] = 1;
+//        countPicked++;
+//    }
+
+    var returnString = "";
+    for (var i = 0; i < positions.length; i++) {
+        returnString += positions[i];
+        if (i !== positions.length - 1)
+            returnString += ",";
+    }
+
+    return returnString;
+}
+
 function action(mode, type, selection) {
-    if (mode == -1) {
-	cm.dispose();
+    if (mode === -1) {
+        cm.dispose();
+    } else if (mode === 0) {
+        cm.dispose();
     } else {
-	if (mode == 0 && status == 0) {
-	    cm.dispose();
-	    return;
-	}
-	if (mode == 1) {
-	    status++;
-	} else {
-	    status--;
-	}
-	boxStage(cm);
+        if (mode === 1)
+            status++;
+        else
+            status--;
+        var eim = cm.getPlayer().getEventInstance();
+        if (status === 0) {
+            party = eim.getPlayers();
+            preamble = eim.getProperty("leader" + nthtext + "preamble");
+            gaveItems = eim.getProperty("leader" + nthtext + "gaveItems");
+            if (preamble === null) {
+                cm.sendOk("Hi. Welcome to the " + nthtext + " stage.");
+                eim.setProperty("leader" + nthtext + "preamble", "done");
+                eim.setProperty("stage" + nthtext + "combo", generateCombo());
+                cm.dispose();
+            } else {
+                if (!isLeader()) {
+                    if (gaveItems === null) {
+                        cm.sendOk("Please tell your #bParty Leader#k to come talk to me");
+                    } else {
+                        cm.sendOk("Hurry, go to the next stage, the portal is open!");
+                    }
+                    cm.dispose();
+                }
+                if (gaveItems === null) {
+                    if (cm.getPlayer().getMap().getCharacters().size() !== eim.getPlayers().size()) {
+                        cm.sendOk("Please wait for all of your party members to get here.");
+                        cm.dispose();
+                        return;
+                    }
+                    objset = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    var playersOnCombo = 0;
+                    var map = cm.getPlayer().getMap();
+                    for (var i = 0; i < party.size(); i++) {
+                        for (var y = 0; y < map.getAreas().size(); y++) {
+                            if (map.getArea(y).contains(party.get(i).getPosition())) {
+                                playersOnCombo++;
+                                objset[y] = 1;
+                                //cm.mapMessage(5, "Player found on " + (y + 1));
+                                break;
+                            }
+                        }
+                    }
+
+                    if (playersOnCombo === 5 || cm.getPlayer().gmLevel() > 0) {
+                        var combo = eim.getProperty("stage" + nthtext + "combo").split(',');
+                        var correctCombo = true;
+                        for (i = 0; i < objset.length && correctCombo; i++)
+                            if (parseInt(combo[i]) !== objset[i]) {
+                                //cm.mapMessage(5, "Combo failed on " + (i + 1));
+                                correctCombo = false;
+                            }
+                        if (correctCombo || cm.getPlayer().gmLevel() > 0) {
+                            clear(eim, cm);
+                        } else { // Wrong
+                            //cm.sendOk(eim.getProperty("stage" + nthtext + "combo"));
+                            failstage(eim, cm);
+                        }
+                        cm.dispose();
+                    } else {
+                        cm.sendNext("It looks like you haven't found the 5 boxes just yet. Please think of a different combination of boxes Only 5 are allowed to stand on boxes, and if you move it may not count as an answer, so please keep that in mind. Keep going!");
+                        cm.dispose();
+                    }
+                }
+            }
+        }
     }
 }
 
-function clear(stage, eim, cm) {
-    eim.setProperty("8stageclear","true");
+function clear(eim, cm) {
+    var map = eim.getMapInstance(cm.getPlayer().getMapId());
+    map.broadcastMessage(Packages.tools.MaplePacketCreator.showEffect("quest/party/clear"));
+    map.broadcastMessage(Packages.tools.MaplePacketCreator.playSound("Party1/Clear"));
+    map.broadcastMessage(Packages.tools.MaplePacketCreator.environmentChange("gate", 2));
 
-    cm.showEffect(true, "quest/party/clear");
-    cm.playSound(true, "Party1/Clear");
-    cm.environmentChange(true, "gate");
-    cm.givePartyExp(5040, eim.getPlayers());
-    // stage 9 does not have a door, might be cause of DC error
+    eim.setProperty("8stageclear", "true");
+    eim.setProperty("leader" + nthtext + "gaveItems", "done");
+    cm.givePartyQuestExp("LudiPQ8th");
 }
 
 function failstage(eim, cm) {
-    cm.showEffect(true, "quest/party/wrong_kor");
-    cm.playSound(true, "Party1/Failed");
+    var map = eim.getMapInstance(cm.getPlayer().getMapId());
+    map.broadcastMessage(Packages.tools.MaplePacketCreator.playSound("Party1/Failed"));
+    map.broadcastMessage(Packages.tools.MaplePacketCreator.showEffect("quest/party/wrong_kor"));
 }
 
-function boxStage(cm) {
-    var debug = false;
-    var eim = cm.getEventInstance();
-    var nthtext = "eighth";
-    var nthobj = "boxes";
-    var nthverb = "stand";
-    var nthpos = "stand too close to the edges";
-    var curcombo = stage8combos;
-    var currect = cm.getMap().getAreas();
-    var objset = [0,0,0,0,0,0,0,0,0];
-
-    if (cm.isLeader()) { // leader
-	if (status == 0) {
-	    party = eim.getPlayers();
-	    preamble = eim.getProperty("leader" + nthtext + "preamble");
-	    if (preamble == null) {
-		cm.sendNext("Hi. Welcome to the eighth stage. Next to me, there are nine boxes. All you have to do, is have 5 people stand on them and then, the leader must click on me to see if it is correct. Good Luck!");
-		eim.setProperty("leader" + nthtext + "preamble","done");
-		eim.setProperty("stage" + nthtext + "combo", Math.floor(Math.random() * curcombo.length).toString());
-		cm.dispose();
-	    } else { // otherwise, check for stage completed
-		var complete = eim.getProperty("8stageclear");
-		if (complete != null) {
-		    var mapClear = "8stageclear";
-		    eim.setProperty(mapClear,"true"); // Just to be sure
-		    cm.sendNext("Please hurry on to the next stage, the portal has opened!");
-		} else {
-		    var totplayers = 0;
-		    for (i = 0; i < objset.length; i++) {
-			for (j = 0; j < party.size(); j++) {
-			    var present = currect.get(i).contains(party.get(j).getPosition());
-			    if (present) {
-				objset[i] = objset[i] + 1;
-				totplayers = totplayers + 1;
-			    }
-			}
-		    }
-		    if (totplayers == 5 || debug) {
-			var combo = curcombo[parseInt(eim.getProperty("stage" + nthtext + "combo"))];
-			var testcombo = true;
-			for (i = 0; i < objset.length; i++) {
-			    if (combo[i] != objset[i]){
-				testcombo = false;
-			    }
-			}
-			if (testcombo || debug) {
-			    clear(8,eim,cm);
-			    if (cm.getEventInstance().getProperty("s8start") != null) {
-				var starts4Time = cm.getEventInstance().getProperty("s8start");
-				var nowTime = new Date().getTime();
-				if((nowTime - starts4Time) < 90000)
-				    cm.getEventInstance().setProperty("s8achievement", "true"); // give via portal script.
-			    }
-			    cm.dispose();
-			} else {
-			    failstage(eim,cm);
-			    cm.dispose();
-			}
-		    } else {
-			if (debug) {
-			    var outstring = "Objects contain:"
-			    for (i = 0; i < objset.length; i++) {
-				outstring += "\r\n" + (i+1).toString() + ". " + objset[i].toString();
-			    }
-			    cm.sendNext(outstring);
-			    var combo = curcombo[parseInt(eim.getProperty("stage" + nthtext + "combo"))];
-			} else {
-			    cm.sendNext("It looks like you haven't found the 5 " + nthobj + " just yet. Please think of a different combination of " + nthobj + ". Only 5 are allowed to " + nthverb + " on " + nthobj + ", and if you " + nthpos + " it may not count as an answer, so please keep that in mind. Keep going!");
-			    cm.dispose();
-			}
-		    }
-		}
-	    }
-	} else {
-	    cm.dispose();
-	}
-    } else { // not leader
-	if (status == 0) {
-	    var complete = eim.getProperty("8stageclear");
-	    if (complete != null) {
-		cm.sendNext("Please hurry on to the next stage, the portal has opened!");
-		cm.dispose();
-	    } else {
-		cm.sendNext("Please have the party leader talk to me.");
-		cm.dispose();
-	    }
-	} else {
-	    var complete = eim.getProperty("8stageclear");
-	    if (complete != null) {
-		cm.sendNext("Please hurry on to the next stage, the portal has opened!");
-		cm.dispose();
-	    }
-	    cm.dispose();
-	}
-    }
+function isLeader() {
+    return cm.isLeader();
 }

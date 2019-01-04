@@ -1,4 +1,3 @@
 function enter(pi) {
-    pi.playPortalSE();
-    pi.warp(103040440,0);
+    pi.openNpc(1052125); //It is actually suppose to open the npc, because it leads to a boss map
 }

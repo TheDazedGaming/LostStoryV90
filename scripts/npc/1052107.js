@@ -1,7 +1,10 @@
 function start() {
-	cm.getMap().killMonster(5090000);
-	cm.dispose();
+	if(cm.getPlayer().getMap().getMonsterById(5090000) != null){
+	    cm.sendOk("The light has destroyed the darkness.");
+	    cm.getPlayer().getMap().killMonster(cm.getPlayer(), cm.getPlayer().getMap().getMonsterById(5090000), false);
+	    cm.dispose();
+	} else {
+	    cm.sendOk("The light is strong.");
+	    cm.dispose();
+	}
 }
-
-function action(mode, type, selection) {
-}	

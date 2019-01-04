@@ -8,7 +8,7 @@ function action(mode, type, selection) {
 	status++;
     } else {
 	if (status <= 1) {
-	    cm.safeDispose();
+	    cm.dispose();
 	    return;
 	}
 	status--;

@@ -1,126 +1,111 @@
-/* 
- *  Rooney - Happy Ville NPC
- */
 
-var status = -1;
-var firstsel = 0;
+var mlg = 4000313;
+
+var status;
+
+function start(){
+	status = -1;
+	action(1, 0, 0);
+}
 
 function action(mode, type, selection) {
-    if (mode == 1) {
-	status++;
-    } else {
-	cm.sendNext("I can see that you are busy now~ But if you have some time later on, please don't forget to visit me. You will experience the whole new Happy Ville!");
-	cm.safeDispose();
-	return;
-    }
-
-    if (status == 0) {
-	cm.sendSimple("Happy Holidays~ So, you are curious about the happy things that are happening in Happy Ville? Alright then! I will send you to Happy Ville, the Happiest town in Maple World! \n\r #b#L0#Visit the HappyVille#l \n\r #b#L1#Gifts...#l \n\r #b#L2#Santa Encyclopedia#l \n\r #b#L3#I am a Santa Claus!#l");
-    } else if (status == 1) {
-	firstsel = selection;
-
-	if (selection == 0) {
-	    cm.warp(209000000, 0);
-	    cm.dispose();
-	} else if (selection == 1) {
-	    cm.sendNext("It's the Christmas gift~ But, you need to do something for me... Share your warm hearts with other people around you.... Dont you believe in Santa Claus? There are some items can only be recieved in here.");
-	} else if (selection == 2) {
-	    cm.sendNext("How much do you know about Christmas? Well, the Santa Encyclopedia tells it all! Do you have all six of them? If so, I'm willing to trade 30 Rascal Snowpiece for it.")
-	} else {
-	    cm.sendSimple("Wow really? If that's so.. \n\r #b#L0#Santa Costume please!#l \n\r #b#L1#Remove Santa Costume please!#l");
+    if (mode < 0 || (status == 0 && mode == 0)){
+        cm.dispose();
+		return;
 	}
-    } else if (status == 2) {
-	if (firstsel == 2) {
-	    if (cm.haveItem(4161037, 1) &&
-		cm.haveItem(4161038, 1) &&
-		cm.haveItem(4161039, 1) &&
-		cm.haveItem(4161040, 1) &&
-		cm.haveItem(4161041, 1) &&
-		cm.haveItem(4161042, 1)) {
-
-		if (cm.canHold(4032176)) {
-		    cm.gainItem(4161037, -1);
-		    cm.gainItem(4161038, -1);
-		    cm.gainItem(4161039, -1);
-		    cm.gainItem(4161040, -1);
-		    cm.gainItem(4161041, -1);
-		    cm.gainItem(4161042, -1);
-		    cm.gainItem(4032176, 30);
-		    cm.sendOk("Happy holidays!");
-		} else {
-		    cm.sendOk("It seems that you do not have any inventory slot for the gift :(");
+	if (mode == 1)
+		status++;
+	else
+		status--;
+	if (status == 0) {
+			/*if (cm.haveItem(mlg)) {
+			var text = "Hey #b#h ##k, I see you've been working on your skills!\r\n";
+			text += "Please select what you'd like to purchase below.\r\n";
+			text += "You currently have #b#c" + mlg + "##k #v" + mlg + "#\r\n";
+			text += "#L0##v1003057##b 1 Hour of Elite Account Service  - 50 #v" + mlg +"##k#l\r\n";
+			text += "#L1##v2022179##b 1 Onyx Apple - 35 #v" + mlg +"##k#l\r\n";
+			text += "#L2##v2022283##b 1 Subani's Mystic Cauldron - 40 #v" + mlg +"##k#l\r\n";
+			text += "#L3##v1112414##b Lilin's Ring - 75 #v" + mlg +"##k#l\r\n";
+			text += "#L4##v1012070##b Strawberry Icecream bar - 150 #v" + mlg +"##k#l\r\n";
+			text += "#L5##v1032048##b Crystal Leaf Earrings - 200 #v" + mlg +"##k#l\r\n";
+			text += "#L6##v1122057##b Mind of Maple Necklace - 400 #v" + mlg +"##k#l\r\n";
+			cm.sendSimple(text);
+			} else {
+				cm.sendOk("You seem to not have any #v" + mlg +"#.\r\nYou can obtain them by doing various skills.\r\nThe current ways to earn them are.\r\nFishing.");
+				cm.dispose();
+			}*/
+			cm.dispose();
+	} else if (status == 1) {
+		if (selection == 0) {
+			if (cm.haveItem(mlg, 50)) {
+				cm.gainItem(mlg, -50);
+				cm.getClient().addEliteHours(1);
+				cm.sendOk("You have purchased #b1#k hour of Elite Account Service. You now have " + cm.getClient().getEliteTimeLeft() + " left of Elite.\r\nHave fun.");
+				cm.dispose();
+			} else {
+				cm.sendOk("I'm sorry #b#h ##k, but you don't have enough #v" + mlg +"#.\r\nWhat you have tried to purchase costs 50, however you only have #c" + mlg +"#.");
+				cm.dispose();
+			}
+		} else if (selection == 1) {
+			if (cm.haveItem(mlg, 35)) {
+					cm.gainItem(mlg, -35);
+					cm.gainItem(2022179, 1);
+					cm.sendOk("You have purchased #b1#k Onyx Apple.");
+					cm.dispose();
+			} else {
+				cm.sendOk("I'm sorry #b#h ##k, but you don't have enough #v" + mlg +"#.\r\nWhat you have tried to purchase costs 35, however you only have #c" + mlg +"#.");
+				cm.dispose();
+			}
+		} else if (selection == 2) {
+				if (cm.haveItem(mlg, 40)) {
+					cm.gainItem(mlg, -40);
+					cm.gainItem(2022283, 1);
+					cm.sendOk("You have purchased #b1#k Subani's Mystic Cauldron.");
+					cm.dispose();
+				} else {
+					cm.sendOk("I'm sorry #b#h ##k, but you're don't have enough #v" + mlg +"#.\r\nWhat you have tried to purchase costs 40, However you only have #c" + mlg +"#.");
+					cm.dispose();
+				}
+		} else if (selection == 3) {
+			if (cm.haveItem(mlg, 75)) {
+					cm.gainItem(mlg, -75);
+					cm.gainItem(1112414, 1);
+					cm.sendOk("You have purchased #b1#k Lilin's Ring.");
+					cm.dispose();
+			} else {
+				cm.sendOk("I'm sorry #b#h ##k, but you don't have enough #v" + mlg +"#.\r\nWhat you have tried to purchase is 75, however you only have #c" + mlg +"#.");
+				cm.dispose();
+			}
+		} else if (selection == 4) {
+			if (cm.haveItem(mlg, 150)) {
+				cm.gainItem(mlg, -150);
+				cm.gainItem(1012070, 1);
+				cm.sendOk("You have purchased #b1#k Strawberry Icecream Bar.");
+				cm.dispose();
+			} else {
+				cm.sendOk("I'm sorry #b#h ##k, but you don't have enough #v" + mlg +"#.\r\nWhat you have tried to purchase costs 150, however you only have #c" + mlg +"#.");
+				cm.dispose();
+			}
+		} else if (selection == 5) {
+			if (cm.haveItem(mlg, 200)) {
+				cm.gainItem(mlg, -200);
+				cm.gainItem(1032048, 1);
+				cm.sendOk("You have purchased #b1#k Crystal Leaf Earring.");
+				cm.dispose();
+			} else {
+				cm.sendOk("I'm sorry #b#h ##k, but you don't have enough #v" + mlg +"#.\r\nWhat you have tried to purchase costs 200, however you only have #c" + mlg +"#.");
+				cm.dispose();
+			}
+		} else if (selection == 6) {
+			if (cm.haveItem(mlg, 400)) {
+				cm.gainItem(mlg, -400);
+				cm.gainItem(1122057, 1);
+				cm.sendOk("You have purchased #b1#k Maple Mind Necklace.");
+				cm.dispose();
+			} else {
+				cm.sendOk("I'm sorry #b#h ##k, but you do'nt have enough #v" + mlg +"#.\r\nWhat you have tried to purchase costs 400, however you only have #c" + mlg +"#.");
+				cm.dispose();
+			}
 		}
-	    } else {
-		cm.sendOk("It seems that you do not have the required items from the naughty monster out to destroy this Christmas! Get it as soon as possible before the night falls as Santa is coming to town!");
-	    }
-	    cm.safeDispose();
-	} else if (firstsel == 3) {
-	    if (selection == 0) {
-		cm.gainItem(1002225, 1); // Santa Hat
-		cm.gainItem(1082101, 1); // Santa Glove
-		cm.gainItem(1702210, 1); // Santa Buddy
-		cm.gainItem(1012007, 1); // Santa Beard
-		cm.gainItem(1051131, 1); // Santa Girl Dress
-		cm.gainItem(1050019, 1); // Santa Costume
-	    } else if (selection == 1) {
-		cm.removeAll(1002225); // Santa Hat
-		cm.removeAll(1082101); // Santa Glove
-		cm.removeAll(1702210); // Santa Buddy
-		cm.removeAll(1012007); // Santa Beard
-		cm.removeAll(1051131); // Santa Girl Dress
-		cm.removeAll(1050019); // Santa Costume
-		// Others
-		cm.removeAll(1002720); // Horned Santa Hat
-		cm.removeAll(1071003); // Red Santa Boots
-		cm.removeAll(1702008); // Santa Sack
-		cm.removeAll(1050119); // Santa boy
-	    }
-	    cm.dispose();
-	} else {
-	    cm.sendSimple("What kind of gift do you prefer? \n\r #L0##i3010045:# #bFor 2000 Rascal Snowpiece from naughty mobs!#k#l \n\r #L1##i2022042:# #bFor 20 Rascal Snowpiece from naughty mobs!#k#l \n\r #L2##i1122018:# #bFor 3000 Rascal Snowpiece from naughty mobs!#k#l \n\r #L3##i2212000:# #bFor 10 Rascal Snowpiece from naughty mobs!#k#l \n\r #L4##i5490000:# #bFor 200 Rascal Snowpiece from naughty mobs!#k#l \n\r #L5##i5490001:# #bFor 100 Rascal Snowpiece from naughty mobs!#k#l");
 	}
-    } else if (status == 3) {
-
-	var snow = 0;
-	var item = 0;
-
-	switch (selection) {
-	    case 0:
-		snow = 2000;
-		item = 3010045;
-		break;
-	    case 1:
-		snow = 20;
-		item = 2022042;
-		break;
-	    case 2:
-		snow = 3000;
-		item = 1122018;
-		break;
-	    case 3:
-		snow = 10;
-		item = 2212000;
-		break;
-	    case 4:
-		snow = 200;
-		item = 5490000;
-		break;
-	    case 5:
-		snow = 100;
-		item = 5490001;
-		break;
-	}
-	if (cm.haveItem(4032176, snow)) {
-	    if (cm.canHold(item)) {
-		cm.gainItem(item, 1);
-		cm.gainItem(4032176, -snow);
-		cm.sendOk("Happy holidays!");
-	    } else {
-		cm.sendOk("It seems that you do not have any inventory slot for the gift :(");
-	    }
-	} else {
-	    cm.sendOk("It seems that you do not have the required items from the naughty monster out to destroy this Christmas! Get it as soon as possible before the night falls as Santa is coming to town!");
-	}
-	cm.safeDispose();
-    }
 }

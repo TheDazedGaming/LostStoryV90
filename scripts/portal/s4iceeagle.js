@@ -1,26 +1,34 @@
+/*
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/**
+ * @author BubblesDev v83 (Moogra)
+ * @purpose Warps to the Junior Balrog map for the Rush Skill.
+ */
 function enter(pi) {
-    if (pi.getQuestStatus(6242) == 1 || pi.getQuestStatus(6243) == 1) {
-	if (!pi.haveItem(4001114)) {
-	    if (pi.getPlayerCount(921100200) == 0) {
-		pi.playPortalSE();
-		pi.warp(921100210, 0);
-		return true;
-	    } else {
-		pi.playerMessage("Other characters are on request. You can't enter.");
-	    }
-	} else {
-	    pi.playerMessage("You don't have Freezer's Egg. You can't enter.");
-	}
-    } else if (pi.getQuestStatus(6242) == 2 && pi.getQuestStatus(6243) == 0) {
-	if (!pi.haveItem(4001114)) {
-	    pi.playPortalSE();
-	    pi.warp(921100210, 0);
-	    return true;
-	} else {
-	    pi.playerMessage("You don't have Freezer's Egg. You can't enter." );
-	}
+    if(pi.isQuestStarted(6242)) {
+        pi.warp(921100210, 0);
+        return true;
     } else {
-	pi.playerMessage("You can't enter sealed place.");
+        pi.getPlayer().message("A mysterious force won't let you in.");
+        return false;
     }
-    return false;
 }

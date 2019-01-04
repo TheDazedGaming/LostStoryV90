@@ -1,152 +1,125 @@
-var status = 0;
+/**
+ * @NPC: Spiegelmann
+ * @MapID: 980000000 (Spiegelmann's Office)
+*/
 
-function start() {
-    status = -1;
-    action(1, 0, 0);
+var status = -1;
+var exitMap = 980000000;
+
+function start(){
+	status = -1;
+	action(1, 0, 0);
 }
-
 
 function action(mode, type, selection) {
-    if (mode == 1)
-        status++;
-    else
+    if (mode < 0 || (status == 0 && mode == 0)){
         cm.dispose();
-    if (status == 0 && mode == 1) {
-        var selStr = "Sign up for Monster Carnival!\r\n#L100#Trade Maple Coin.#l";
-	var found = false;
-        for (var i = 0; i < 9; i++){
-            if (getCPQField(i+1) != "") {
-                selStr += "\r\n#b#L" + i + "# " + getCPQField(i+1) + "#l#k";
-		found = true;
-            }
-        }
-        if (cm.getParty() == null) {
-            cm.sendSimple("You are not in a party.\r\n#L100#Trade Maple Coin.#l");
-        } else {
-            if (cm.isLeader()) {
-		if (found) {
-                    cm.sendSimple(selStr);
-		} else {
-		    cm.sendSimple("There are no rooms at the moment.\r\n#L100#Trade Maple Coin.#l");
-		}
-            } else {
-                cm.sendSimple("Please tell your party leader to speak with me.\r\n#L100#Trade Maple Coin.#l");
-            }
-        }
-    } else if (status == 1) {
-	if (selection == 100) {
-	    cm.sendSimple("#b#L0#50 Maple Coin = Spiegelmann Necklace#l\r\n#L1#30 Maple Coin = Spiegelmann Marble#l\r\n#L2#50 Sparkling Maple Coin = Spiegelmann Necklace of Chaos#l#k");
-	} else if (selection >= 0 && selection < 9) {
-	    var mapid = 980000000+((selection+1)*100);
-            if (cm.getEventManager("cpq").getInstance("cpq"+mapid) == null) {
-                if ((cm.getParty() != null && 1 < cm.getParty().getMembers().size() && cm.getParty().getMembers().size() < (selection == 4 || selection == 5 || selection == 8 ? 4 : 3)) || cm.getPlayer().isGM()) {
-                    if (checkLevelsAndMap(30, 200) == 1) {
-                        cm.sendOk("A player in your party is not the appropriate level.");
-                        cm.dispose();
-                    } else if (checkLevelsAndMap(30, 200) == 2) {
-                        cm.sendOk("Everyone in your party isnt in this map.");
-                        cm.dispose();
-                    } else {
-                        cm.getEventManager("cpq").startInstance(""+mapid, cm.getPlayer());
-                        cm.dispose();
-                    }
-                } else {
-                    cm.sendOk("Your party is not the appropriate size.");
-                }
-            } else if (cm.getParty() != null && cm.getEventManager("cpq").getInstance("cpq"+mapid).getPlayerCount() == cm.getParty().getMembers().size()) {
-                if (checkLevelsAndMap(30, 200) == 1) {
-                    cm.sendOk("A player in your party is not the appropriate level.");
-                    cm.dispose();
-                } else if (checkLevelsAndMap(30, 200) == 2) {
-                    cm.sendOk("Everyone in your party isnt in this map.");
-                    cm.dispose();
-                } else {
-                    //Send challenge packet here
-                    var owner = cm.getChannelServer().getPlayerStorage().getCharacterByName(cm.getEventManager("cpq").getInstance("cpq"+mapid).getPlayers().get(0).getParty().getLeader().getName());
-                    owner.addCarnivalRequest(cm.getCarnivalChallenge(cm.getChar()));
-                    //if (owner.getConversation() != 1) {
-                        cm.openNpc(owner.getClient(), 2042001);
-                    //}
-                    cm.sendOk("Your challenge has been sent.");
-                    cm.dispose();
-                }
-            } else {
-                cm.sendOk("The two parties participating in Monster Carnival must have an equal number of party member");
-                cm.dispose();
-            }
-	} else {
-	    cm.dispose();
+		return;
 	}
-	} else if (status == 2) {
-	    if (selection == 0) {
-		if (!cm.haveItem(4001129,50)) {
-		    cm.sendOk("You have no items.");
-		} else if (!cm.canHold(1122007,1)) {
-		    cm.sendOk("Please make room");
-		} else {
-		    cm.gainItem(1122007,1);
-		    cm.gainItem(4001129,-50);
-		}
+	if (mode == 1)
+		status++;
+	else
+		status--;
+	
+	var eventManager = cm.getEventManager("MonsterDefense");
+	if (eventManager == null) {
+		cm.sendOk("Monster Defense is currently unavailable.");
 		cm.dispose();
-	    } else if (selection == 1) {
-		if (!cm.haveItem(4001129,30)) {
-		    cm.sendOk("You have no items.");
-		} else if (!cm.canHold(2041211,1)) {
-		    cm.sendOk("Please make room");
-		} else {
-		    cm.gainItem(2041211,1);
-		    cm.gainItem(4001129,-30);
-		}
+		return;
+	}
+	
+	if (cm.getPlayer().getParty() == null) {
+		cm.sendOk("If you would like to participate in Monster Defense please enter a party.");
 		cm.dispose();
-	    } else if (selection == 2) {
-		if (!cm.haveItem(4001254,50)) {
-		    cm.sendOk("You have no items.");
-		} else if (!cm.canHold(1122058,1)) {
-		    cm.sendOk("Please make room");
-		} else {
-		    cm.gainItem(1122058,1);
-		    cm.gainItem(4001254,-50);
-		}
+		return;
+	}else if (!cm.isLeader() && cm.getPlayer().getMapId() == exitMap) {
+		cm.sendOk("Please tell your party leader to speak with me.");
 		cm.dispose();
-	    }
-        }
+		return;
+	}
+	
+	var players = cm.getPlayer().getParty().getMembers();
+    var overLevelTen = 0;
+    var cooldown;
+	for (var i = 0; i < players.size(); i++){
+		var player = players.get(i);
+		if(player.getLevel() >= 10){
+			overLevelTen++;
+		}
+		var playerChr = player.getPlayerInChannel();
+		if(playerChr != null && playerChr.isProgressValueSet("md_last")){
+			var enterTime = parseInt(playerChr.getProgressValue("md_last"));
+			if((Packages.java.lang.System.currentTimeMillis() - enterTime) < 10 * 60 * 1000){
+				if(cooldown != null)cooldown += "\r\n";
+				else cooldown = "";
+				cooldown += player.getName() + " - " + Packages.tools.StringUtil.getReadableMillis(Packages.java.lang.System.currentTimeMillis(), enterTime + 10 * 60 * 1000);
+			}
+		}
+	}
+	
+	if(overLevelTen != players.size()){
+		cm.sendOk("You must be atleast level 10 to enter Monster Defense.");
+		cm.dispose();
+		return;
+	}
+	
+	if(cooldown != null){
+		cm.sendOk("The following players still have a 10 minute cooldown till they can enter Monster Defense.\r\n\r\n" + cooldown);
+		cm.dispose();
+		return;
+	}
+	
+	if(cm.getPlayer().getMapId() == exitMap){
+		if(status == 0){
+			var selStr = "Select the Field you would like to join.";
+			var hasRoomAvailable = false;
+			for (var i = 0; i <= 1; i++) {
+				var room = getRoom(i);
+				if (room != "") {
+					selStr += "\r\n#L" + i + "# " + room + "#l";
+					hasRoomAvailable = true;
+				}
+			}
+			if(hasRoomAvailable){
+				cm.sendSimple(selStr);
+			}else{
+				cm.sendOk("No fields are available at this time.");
+				cm.dispose();
+				return;
+			}
+		}else if(status == 1){
+			if(selection == 0 || selection == 1){
+				var eim = eventManager.getInstance("MD_" + selection);
+				if(eim == null){
+					eventManager.startInstance(cm.getPlayer().getParty(), cm.getPlayer().getMap(), null, selection);
+				}else if(eim.getProperty("started").equals("false")){
+					eim.registerParty(cm.getPlayer().getParty(), cm.getPlayer().getMap());
+				}else{
+					cm.sendOk("Someone has already entered that field.");
+				}
+				cm.dispose();
+			}
+		}
+	}else{
+		//not in entrance
+	}
 }
 
-function checkLevelsAndMap(lowestlevel, highestlevel) {
-    var party = cm.getParty().getMembers();
-    var mapId = cm.getMapId();
-    var valid = 0;
-    var inMap = 0;
 
-    var it = party.iterator();
-    while (it.hasNext()) {
-        var cPlayer = it.next();
-        if (!(cPlayer.getLevel() >= lowestlevel && cPlayer.getLevel() <= highestlevel) && cPlayer.getJobId() != 900) {
-            valid = 1;
-        }
-        if (cPlayer.getMapid() != mapId) {
-            valid = 2;
-        }
-    }
-    return valid;
-}
-
-function getCPQField(fieldnumber) {
+function getRoom(roomNum) {
     var status = "";
-    var event1 = cm.getEventManager("cpq");
-    if (event1 != null) {
-        var event = event1.getInstance("cpq"+(980000000+(fieldnumber*100)));
-        if (event == null && fieldnumber != 5 && fieldnumber != 6 && fieldnumber != 9) {
-            status = "Carnival Field "+fieldnumber+"(2v2)";
-        } else if (event == null) {
-            status = "Carnival Field "+fieldnumber+"(3v3)";
+    var eventManager = cm.getEventManager("MonsterDefense");
+    if (eventManager != null) {
+        var event = eventManager.getInstance("MD_" + roomNum);
+        if (event == null) {
+            status = "Field " + roomNum;
         } else if (event != null && (event.getProperty("started").equals("false"))) {
             var averagelevel = 0;
             for (i = 0; i < event.getPlayerCount(); i++) {
                 averagelevel += event.getPlayers().get(i).getLevel();
             }
             averagelevel /= event.getPlayerCount();
-            status = event.getPlayers().get(0).getParty().getLeader().getName()+"/"+event.getPlayerCount()+"users/Avg. Level "+averagelevel;
+            status = "Field " + roomNum + " - Players: " + event.getPlayerCount();
         }
     }
     return status;

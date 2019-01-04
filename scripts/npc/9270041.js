@@ -1,65 +1,57 @@
-var cost = 20000;
+status = -1;
+oldSelection = -1;
 
 function start() {
-    status = -1;
-    em = cm.getEventManager("AirPlane");
-    action(1, 0, 0);
+    cm.sendSimple("Hello, I am Irene from Singapore Airport. I can assist you in getting you to Singapore in no time. Do you want to go to Singapore?\r\n#b#L0#I would like to buy a plane ticket to Singapore\r\n#b#L1#Let me go in to the departure point.");
 }
 
 function action(mode, type, selection) {
-    if (mode == 0 && status == 0) {
-	cm.dispose();
-	return;
-    }
-    if (mode == 1) {
 	status++;
-    }
-    if (mode == 0 && menu == 0) {
-	cm.sendNext("I am here for a long time. Please talk to me again when you change your mind.");
-	cm.dispose();
-    }
-    if (mode == 0 && menu == 1) {
-	cm.sendOk("Please confirm the departure time you wish to leave. Thank you.");
-	cm.dispose();
-    }
-    if (status == 0) {
-	cm.sendSimple("Hello there~ I am Irene from Singapore Airport. I was transferred to #m103000000# to celebrate new opening of our service! How can i help you?\r\n#L0##bI would like to buy a plane ticket to Singapore#k#l\r\n#L1##bLet me go in to the departure point.#k#l");
-    } else if (status == 1) {
-	menu = selection;
-	if (menu == 0) {
-	    cm.sendYesNo("The ticket will cost you 20,000 mesos. Will you purchase the ticket?");
-	} else if (menu == 1) {
-	    cm.sendYesNo("Would you like to go in now? You will lose your ticket once you go in~ Thank you for choosing Wizet Airline.");
+    if (mode <= 0){
+		oldSelection = -1;
+		cm.dispose();
+		return;
 	}
-    } else if (status == 2) {
-	if (menu == 0) {
-	    if (!cm.canHold(4031731) || cm.getMeso() < cost) {
-		cm.sendOk("I don't think you have enough meso or empty slot in your ETC inventory. Please check and talk to me again.");
-	    } else {
-		cm.gainMeso(-cost);
-		cm.gainItem(4031731, 1);
-	    }
-	    cm.dispose();
-	} else if(menu == 1) {
-	    if(em == null) {
-		cm.sendNext("Event error, please restart your server for solution");
+	
+	if (status == 0) {
+		if (selection == 0){
+			cm.sendYesNo("The ticket will cost you 5,000 mesos. Will you purchase the ticket?");
+		} else if (selection == 1) {
+			cm.sendYesNo("Would you like to go in now? You will lose your ticket once you go in! Thank you for choosing Wizet Airline.");
+		}
+		oldSelection = selection;
+	} else if (status == 1) {
+		if (oldSelection == 0) {
+			if (cm.canHold(4031731)) {
+				cm.gainMeso(-5000);
+				cm.gainItem(4031731);
+			} else {
+				cm.getPlayer().dropMessage(1, "Your inventory is full.");
+			}
+			cm.dispose();
+		} else if (oldSelection == 1) {
+			if (cm.haveItem(4031731)) {
+				var em = cm.getEventManager("AirPlane");
+				if (em.getProperty("entry") == "true") {
+					cm.warp(540010000); // Find the actual map.
+					cm.gainItem(4031731, -1);
+					cm.dispose();
+				} else {
+					status = 2;
+					cm.sendNext("We will begin boarding 5 minutes before the takeoff. Please be patient and wait for a few minutes. Be aware that the plane will take off right on time, and we stop receiving tickets 1 minute before that, so please make sure to be here on time.");
+				}
+			} else {
+				cm.sendOk("I'm sorry, but you don't have a #t4031731# to get on the plane!");
+				cm.dispose();
+			}
+		}
+	} else if (status == 2) {
+		cm.sendYesNo("Would you like to be taken straight to #bSingapore - CBD#k?");
+	} else if (status == 3) {
+		cm.warp(540010000);
+		cm.gainItem(4031731, -1);
 		cm.dispose();
-	    } else if (!cm.haveItem(4031731)) {
-		cm.sendNext("Please do purchase the ticket first. Thank you~");
+	} else {
 		cm.dispose();
-	    } else if (em.getProperty("entry").equals("true")) {
-		cm.sendYesNo("It looks like there's plenty of room for this ride. Please have your ticket ready so I can let you in, The ride will be long, but you'll get to your destination just fine. What do you think? Do you want to get on this ride?");
-	    } else if(em.getProperty("entry").equals("false") && em.getProperty("docked").equals("true")) {
-		cm.sendNext("The plane is getting ready for takeoff. I'm sorry, but you'll have to get on the next ride. The ride schedule is available through the usher at the ticketing booth.");
-		cm.dispose();
-	    } else {
-		cm.sendNext("We are sorry but the gate is closed 1 minute before the departure.");
-		cm.dispose();
-	    }
 	}
-    } else if (status == 3) {
-	cm.gainItem(4031731, -1);
-	cm.warp(540010100);
-	cm.dispose();
-    }
 }

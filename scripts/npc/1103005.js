@@ -1,25 +1,44 @@
 /*
-	NPC Name: 		Nineheart
-	Map(s): 		-Erev Cygnus Intro-
-	Description: 		warpout, accept cygnus help request
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/**
+ * @NPC: Cygnus
+ * @ID: 1103005
+ * @Map Id: 913040006
+ * @Function: Cygnus Creator
+ * @Author Jay (text)
+ * @Author David
+ */
 
 function start() {
-    cm.askAcceptDecline("Becoming a Knight of Cygnus requires talent, faith, courage, and will power... and it looks like you are more than qualified to become a Knight of Cygnus. What do you think? If you wish to become one right this minute, I'll take you straight to Erev. Would you like to head over to Erev right now?");
+    cm.sendAcceptDecline("Becoming a Knight of Cygnus requires talent, faith, courage, and will power... and it looks like you are more than qualified to become a Knight of Cygnus. What do you think? If you wish to become one right this minute, I'll take you straight to Erev. Would you like to head over to Erev right now?");
 }
-
-function action(mode, type, selection) {
-    var returnmap = cm.getSavedLocation("CYGNUSINTRO");
-
-    if (returnmap == null) {
-        cm.warp(130000000, 0);
-    } else {
-        if (mode == 1) {
-            cm.warp(returnmap != -1 ? returnmap : 130000000, 0);
-        } else {
-            cm.warp(130000000, 0);
-        }
-	cm.clearSavedLocation("CYGNUSINTRO");
+ 	
+function action(coded, by, Moogra) {
+    if (coded > 0)
+        cm.warp(130000000);
+    else {
+		var loc = cm.getPlayer().getSavedLocation("CYGNUSINTRO");
+		if(loc != null)cm.warp(loc);
+		else cm.warp(100000000);
     }
     cm.dispose();
 }

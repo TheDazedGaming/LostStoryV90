@@ -1,7 +1,10 @@
+/**
+ *	@Description: To Boss Fight (Juliet)
+ */
 function enter(pi) {
-    if (pi.getMap().getCharactersSize() == 4 || pi.getMap(926100401).getCharactersSize() > 0) {
-	pi.warpParty(926110401,0);
+    if (pi.getPlayer().getMap().getCharacters().size() == pi.getPlayer().getEventInstance().getPlayerCount()) {
+		pi.warpParty(926110401);
     } else {
-	pi.playerMessage(5, "Not everyone is here.");
+		pi.playerMessage(5, "Not all of your party members are here.");
     }
 }

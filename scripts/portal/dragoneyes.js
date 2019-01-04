@@ -1,4 +1,9 @@
 function enter(pi) {
-	pi.forceStartQuest(22012);
+	if (pi.isQuestCompleted(22012)) {
+		return false;
+	} else {
+		pi.forceCompleteQuest(22012);
+	}
+	pi.blockPortal();
 	return true;
 }

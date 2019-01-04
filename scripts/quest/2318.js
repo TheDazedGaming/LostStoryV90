@@ -8,8 +8,6 @@ Version 1.0 - Script Done.(18/7/2010)
 =============================================================
 */
 
-importPackage(Packages.client);
-
 var status = -1;
 
 function start(mode, type, selection) {
@@ -49,9 +47,9 @@ function end(mode, type, selection) {
 		qm.gainItem(4000499, -50);
 		qm.sendNext("Okay, these should be enough for me to make the #bKiller Mushroom Spores.#k Please hold on for a bit.");
 		qm.forceCompleteQuest();
+		qm.gainItem(2430014, 1);
 	} if(status == 2){
 		qm.sendPrev("Okay, here are the Killer Mushroom Spores. Hopefully this will be enough for you to save our princess and help regain our kingdom. Good luck!");
-		qm.gainItem(2430014, 1);
 		qm.dispose();
 	}
 }

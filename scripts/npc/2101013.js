@@ -1,8 +1,3 @@
-/* Author: aaroncsn(MapleSea Like)
-	NPC Name: 		Karcasa
-	Map(s): 		The Burning Sands: Tents of the Entertainers(260010600)
-	Description: 		Warps to Victoria Island
-*/
 var towns = new Array(100000000,101000000,102000000,103000000,104000000);
 
 function start() {

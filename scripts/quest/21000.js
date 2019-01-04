@@ -1,32 +1,62 @@
+/*
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation version 3 as published by
+    the Free Software Foundation. You may not use, modify or distribute
+    this program under any other version of the GNU Affero General Public
+    License.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/*	
+	Author : kevintjuh93
+	Map(s): 		Aran Training Map 2
+	Description: 		Quest - Help Kid
+	Quest ID : 		21000
+*/
+
+
 var status = -1;
 
 function start(mode, type, selection) {
-    if (mode == 1) {
-	status++;
-    } else {
-	if (status == 0) {
-	    qm.sendNext("No, Aran... There's no point of leaving here if we're to just leave the kid here all by himself. I know it's a lot to ask... but please reconsider!");
-	    qm.dispose();
-	    return;
+    status++;
+	if (mode != 1) {
+	    if(type == 1 && mode == 0)
+		    status -= 2;
+		else{
+			qm.sendNext("No, Aran... We can't leave a kid behind. I know it's a lot to ask, but please reconsider. Please!");
+		    qm.dispose();
+			return;
+		}
 	}
-	status--
-    }
-    if (status == 0) {
-	qm.askAcceptDecline("Wait, where's the kid? Oh no, he must be stuck in the forest! We need to bring the kid back here before the ark leaves! Aran... please go in there and find the kid for me! I know it's a lot to ask considering you're injured... but you're our only hope!");
-    } else if (status == 1) {
-	qm.forceStartQuest(21000, "..w?PGÄÊ."); // Idk what data lol..
-	qm.forceStartQuest(21000, "..w?PGÄÊ."); // Twice, intended..
-	qm.sendNext("#bThe kid is probably somewhere deep in the forest#k! We need to leave right now before the Black Wizard finds us, so please hurry!");
-    } else if (status == 1) {
-	qm.sendNextPrev("The most important thing right now is not to panic, Aran. If you want to see how far you've gone with your quest, press #bQ#k to open the quest window.");
-    } else if (status == 2) {
-	qm.sendNextPrev("Please rescue the kid from the forest, Aran! We cannot afford any more casualties at the hands of the Black Wizard!");
-    } else if (status == 3) {
-	qm.AranTutInstructionalBubble("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow1");
-	qm.dispose();
-    }
-}
+	if (status == 0)
+			qm.sendAcceptDecline("Oh, no! I think there's still a child in the forest! Aran, I'm very sorry, but could you rescue the child? I know you're injured, but I don't have anyone else to ask!");
+		else if (status == 1) {
+			qm.forceStartQuest();
+			qm.sendNext("#bThe child is probably lost deep inside the forest!#k We have to escape before the Black Mage finds us. You must rush into the forest and bring the child back with you!");
+		} else if (status == 2) {
+			qm.sendNextPrev("Don't panic, Aran. If you wish to check the status of the \r\nquest, press #bQ#k and view the Quest window.");
+		} else if (status == 3) {
+			qm.sendNextPrev("Please, Aran! I'm begging you. I can't bear to lose another person to the Black Mage!");
+		} else if (status == 4) {
+			qm.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow1");
+			qm.dispose();
+		}
+		}
+
 
 function end(mode, type, selection) {
-    qm.dispose();
+	qm.forceCompleteQuest();
+	qm.dispose();
 }

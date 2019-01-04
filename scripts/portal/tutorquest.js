@@ -1,33 +1,24 @@
 function enter(pi) {
-    var mapid = pi.getMapId();
-    var questid;
-    var state = 2;
-
-    switch (mapid) {
-	case 130030001:
-	    questid = 20010;
-	    state = 1
-	    break;
-	case 130030002:
-	    questid = 20011;
-	    break;
-	case 130030003:
-	    questid = 20012;
-	    break;
-	case 130030004:
-	    questid = 20013;
-	    break;
-	default:
-	    return;
-    }
-    if (pi.getQuestStatus(questid) == state) {
-	pi.playPortalSE();
-	pi.warp(pi.getMapId() + 1, "sp");
+    var map = pi.getPlayer().getMapId() - 130030000;
+    if(map < 1 || map > 4)
+        return false;
+        
+    if(map == 1) {
+        if(pi.isQuestStarted(20009 + map)) {
+            pi.playPortalSound();
+            pi.warp(130030001 + map);
+        } else {
+            pi.message("Please start the quest in this map first.");
+            return false;
+        }
     } else {
-	if (mapid == 130030001) {
-	    pi.playerMessage(5, "Please click the NPC to receive a quest.");
-	} else {
-	    pi.playerMessage(5, "Please complete the quest.");
-	}
+        if(pi.isQuestCompleted(20009 + map)) {
+            pi.playPortalSound();
+            pi.warp(130030001 + map);
+        } else {
+            pi.message("Please finish the quest in this map first.");
+            return false;
+        }
     }
+	return true;
 }
