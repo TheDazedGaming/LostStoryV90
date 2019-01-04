@@ -92,7 +92,7 @@ function action(mode, type, selection) {
     } else if (status == 12) {
 	cm.askAcceptDecline("But first I must test your skills. Are you ready?");
     } else if (status == 13) {
-	cm.startQuest(100009);
+	cm.forceStartQuest(100009);
 	cm.gainItem(4031011, 1);
 	cm.sendOk("Go see the #bJob Instructor#k somewhere in the city. He will show you the way.");
 	cm.dispose();

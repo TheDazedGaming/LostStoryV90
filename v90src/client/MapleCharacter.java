@@ -961,7 +961,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject implements Se
             ps.setShort(16, chr.job);
             ps.setInt(17, chr.hair);
             ps.setInt(18, chr.face);
-            ps.setInt(19, type == 1 ? 10000 : (type == 0 ? 130030000 : (type == 3 ? 900010000 : 914000000)));
+            ps.setInt(19, chr.mapid);
             ps.setInt(20, chr.meso); // Meso
             ps.setShort(21, (short) 0); // HP ap used
             ps.setByte(22, (byte) 0); // Spawnpoint

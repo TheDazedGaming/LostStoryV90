@@ -1,4 +1,3 @@
-importPackage(Packages.tools);
 
 var battlemap = 502030004;
 var returnmap = 502029000; // Spaceship Crash site

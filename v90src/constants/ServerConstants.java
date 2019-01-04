@@ -23,8 +23,8 @@ package constants;
 
 public class ServerConstants {
     
-    public static final boolean HAMACHI = true;
-    public static final boolean VPS = false;
+    public static final boolean HAMACHI = false;
+    public static final boolean VPS = true;
     public static final byte[] Gateway_IP = {HAMACHI ? (byte) 127 : (VPS ? (byte) 104 : (byte) 127), HAMACHI ? (byte) 0 : (VPS ? (byte) 168 : (byte) 0), HAMACHI ? (byte) 0 : (VPS ? (byte) 125 : (byte) 0), HAMACHI ? (byte) 1 : (VPS ? (byte) 127 : (byte) 1)};
     public static final String Gateway_IP_String = HAMACHI ? "127.0.0.1" : (VPS ? "104.168.125.127" : "127.0.0.1");
 
@@ -67,7 +67,7 @@ public class ServerConstants {
     public static final short MAPLE_VERSION = 90;
     public static final String MAPLE_PATCH = "3";
     public static final boolean Use_Fixed_IV = false;
-    public static final String WORLD_MESSAGE = "Welcome to LostStory BETA!";
+    public static final String WORLD_MESSAGE = "Welcome to Lost BETA!";
     //Faction Stuff
     public static final float FP_MULTIPLIER = 1.3f; // float = rounding the int
     

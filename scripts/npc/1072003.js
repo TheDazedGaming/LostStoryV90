@@ -42,7 +42,7 @@ function action(mode, type, selection) {
     } else if (status == 2) {
 	cm.askAcceptDecline("I will give you a chance if you're ready.");
     } else if (status == 3) {
-	cm.startQuest(100010);
+	cm.forceStartQuest(100010);
 	cm.sendOk("You will have to collect me #b30 #t4031013##k. Good luck.")
     } else if (status == 4) {
 	cm.warp(108000400, 0);

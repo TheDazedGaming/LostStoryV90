@@ -74,8 +74,8 @@ public class ChannelServer implements Serializable {
 
     public static long serverStartTime;
     private int expRate, mesoRate, dropRate, cashRate;
-    private short port = 8585;
-    private static final short DEFAULT_PORT = 8585;
+    private short port = 7575;
+    private static final short DEFAULT_PORT = 7575;
     private int channel, running_MerchantID = 0, flags = 0;
     private String serverMessage, ip, serverName;
     private boolean shutdown = false, finishedShutdown = false, MegaphoneMuteState = false, adminOnly = false;
