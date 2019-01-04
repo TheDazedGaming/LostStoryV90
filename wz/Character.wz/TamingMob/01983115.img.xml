@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<imgdir name="01983115.img">
+    <imgdir name="info">
+        <canvas name="icon" width="36" height="36">
+            <vector name="origin" x="0" y="33"/>
+        </canvas>
+        <canvas name="iconRaw" width="36" height="36">
+            <vector name="origin" x="0" y="33"/>
+        </canvas>
+    </imgdir>
+    <imgdir name="sit">
+        <imgdir name="0">
+            <canvas name="0" width="94" height="84">
+                <vector name="origin" x="46" y="83"/>
+                <string name="z" value="backMobEquipFront"/>
+                <imgdir name="map">
+                    <vector name="navel" x="-3" y="-75"/>
+                </imgdir>
+            </canvas>
+            <int name="delay" value="150"/>
+        </imgdir>
+    </imgdir>
+</imgdir>

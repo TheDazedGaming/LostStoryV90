@@ -32,6 +32,7 @@ import java.util.Map;
 
 
 import client.MapleCharacter;
+import client.MapleClient;
 import client.MapleFaction;
 import database.DatabaseConnection;
 import handling.MapleServerHandler;
@@ -73,9 +74,8 @@ import tools.CollectionUtil;
 public class ChannelServer implements Serializable {
 
     public static long serverStartTime;
-    private int expRate, mesoRate, dropRate, cashRate;
+    private int newExpRate, expRate, mesoRate, dropRate, cashRate;
     private short port = 7575;
-    private static final short DEFAULT_PORT = 7575;
     private int channel, running_MerchantID = 0, flags = 0;
     private String serverMessage, ip, serverName;
     private boolean shutdown = false, finishedShutdown = false, MegaphoneMuteState = false, adminOnly = false;
@@ -93,7 +93,8 @@ public class ChannelServer implements Serializable {
     private int eventmap = -1;
     private final Map<MapleEventType, MapleEvent> events = new EnumMap<MapleEventType, MapleEvent>(MapleEventType.class);
     private static final List<MapleFaction> factions = new ArrayList<MapleFaction>();
-
+    private MapleCharacter player;
+    
     private ChannelServer(final int channel) {
         this.channel = channel;
         mapFactory = new MapleMapFactory();
@@ -135,6 +136,7 @@ public class ChannelServer implements Serializable {
     public final void run_startup_configurations() {
         setChannel(channel); //instances.put
         try {
+            newExpRate = Integer.parseInt(ServerProperties.getProperty("net.sf.odinms.world.newExp"));
             expRate = Integer.parseInt(ServerProperties.getProperty("net.sf.odinms.world.exp"));
             mesoRate = Integer.parseInt(ServerProperties.getProperty("net.sf.odinms.world.meso"));
             dropRate = Integer.parseInt(ServerProperties.getProperty("net.sf.odinms.world.drop"));
@@ -144,7 +146,7 @@ public class ChannelServer implements Serializable {
             flags = Integer.parseInt(ServerProperties.getProperty("net.sf.odinms.world.flags", "0"));
             adminOnly = Boolean.parseBoolean(ServerProperties.getProperty("net.sf.odinms.world.admin", "false"));
             eventSM = new EventScriptManager(this, ServerProperties.getProperty("net.sf.odinms.channel.events").split(","));
-            port = Short.parseShort(ServerProperties.getProperty("net.sf.odinms.channel.net.port" + channel, String.valueOf(DEFAULT_PORT + channel)));
+            port = Short.parseShort(ServerProperties.getProperty("net.sf.odinms.channel.net.port" + channel, String.valueOf(port + channel)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -263,9 +265,14 @@ public class ChannelServer implements Serializable {
     public final int getExpRate() {
         return expRate;
     }
-
+    
+    
     public final void setExpRate(final int expRate) {
+       if (player.getLevel() > 10)
         this.expRate = expRate;
+     else {
+        this.newExpRate = 1;
+}
     }
 
     public final int getCashRate() {

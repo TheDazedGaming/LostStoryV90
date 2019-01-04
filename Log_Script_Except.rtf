@@ -2761,3 +2761,88 @@ Error executing NPC script, NPC ID : 1072003.javax.script.ScriptException: TypeE
 Error executing NPC script, NPC ID : 1072003.javax.script.ScriptException: TypeError: cm.startQuest is not a function in <eval> at line number 45
 ------------------------ 2019-01-03 22:04:48 ------------------------
 Error executing NPC script, NPC ID : 1072007.javax.script.ScriptException: TypeError: cm.startQuest is not a function in <eval> at line number 18
+------------------------ 2019-01-03 22:09:02 ------------------------
+Error executing NPC script, NPC ID : 1072007.javax.script.ScriptException: TypeError: cm.startQuest is not a function in <eval> at line number 18
+------------------------ 2019-01-03 22:10:00 ------------------------
+Error executing NPC script, NPC ID : 1072007.javax.script.ScriptException: TypeError: cm.startQuest is not a function in <eval> at line number 18
+------------------------ 2019-01-03 22:14:10 ------------------------
+Error executing Quest script. (22001)..NPCID: 1013101:java.lang.RuntimeException: Datafile Etc/0403.img does not exist in C:\Users\Administrator\Documents\GitHub\LostStoryV90\wz\Item.wz
+------------------------ 2019-01-03 22:14:16 ------------------------
+Error executing Quest script. (22001)..NPCID: 1013101:java.lang.RuntimeException: Datafile Etc/0403.img does not exist in C:\Users\Administrator\Documents\GitHub\LostStoryV90\wz\Item.wz
+------------------------ 2019-01-03 22:14:31 ------------------------
+Error executing Quest script. (22001)..NPCID: 1013101:java.lang.RuntimeException: Datafile Etc/0403.img does not exist in C:\Users\Administrator\Documents\GitHub\LostStoryV90\wz\Item.wz
+------------------------ 2019-01-03 23:05:36 ------------------------
+java.lang.IllegalAccessException: Class client.messages.CommandProcessor can not access a member of class client.messages.commands.PlayerCommand$help with modifiers ""
+	at sun.reflect.Reflection.ensureMemberAccess(Unknown Source)
+	at java.lang.Class.newInstance(Unknown Source)
+	at client.messages.CommandProcessor.<clinit>(CommandProcessor.java:60)
+	at handling.channel.handler.ChatHandler.GeneralChat(ChatHandler.java:39)
+	at handling.MapleServerHandler.handlePacket(MapleServerHandler.java:511)
+	at handling.MapleServerHandler.messageReceived(MapleServerHandler.java:208)
+	at org.apache.mina.common.support.AbstractIoFilterChain$TailFilter.messageReceived(AbstractIoFilterChain.java:570)
+	at org.apache.mina.common.support.AbstractIoFilterChain.callNextMessageReceived(AbstractIoFilterChain.java:299)
+	at org.apache.mina.common.support.AbstractIoFilterChain.access$1100(AbstractIoFilterChain.java:53)
+	at org.apache.mina.common.support.AbstractIoFilterChain$EntryImpl$1.messageReceived(AbstractIoFilterChain.java:648)
+	at org.apache.mina.filter.codec.support.SimpleProtocolDecoderOutput.flush(SimpleProtocolDecoderOutput.java:58)
+	at org.apache.mina.filter.codec.ProtocolCodecFilter.messageReceived(ProtocolCodecFilter.java:180)
+	at org.apache.mina.common.support.AbstractIoFilterChain.callNextMessageReceived(AbstractIoFilterChain.java:299)
+	at org.apache.mina.common.support.AbstractIoFilterChain.access$1100(AbstractIoFilterChain.java:53)
+	at org.apache.mina.common.support.AbstractIoFilterChain$EntryImpl$1.messageReceived(AbstractIoFilterChain.java:648)
+	at org.apache.mina.filter.executor.ExecutorFilter.processEvent(ExecutorFilter.java:220)
+	at org.apache.mina.filter.executor.ExecutorFilter$ProcessEventsRunnable.run(ExecutorFilter.java:264)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.mina.util.NamePreservingRunnable.run(NamePreservingRunnable.java:51)
+	at java.lang.Thread.run(Unknown Source)
+
+------------------------ 2019-01-03 23:05:36 ------------------------
+java.lang.InstantiationException: client.messages.commands.PlayerCommand$reborndb
+	at java.lang.Class.newInstance(Unknown Source)
+	at client.messages.CommandProcessor.<clinit>(CommandProcessor.java:60)
+	at handling.channel.handler.ChatHandler.GeneralChat(ChatHandler.java:39)
+	at handling.MapleServerHandler.handlePacket(MapleServerHandler.java:511)
+	at handling.MapleServerHandler.messageReceived(MapleServerHandler.java:208)
+	at org.apache.mina.common.support.AbstractIoFilterChain$TailFilter.messageReceived(AbstractIoFilterChain.java:570)
+	at org.apache.mina.common.support.AbstractIoFilterChain.callNextMessageReceived(AbstractIoFilterChain.java:299)
+	at org.apache.mina.common.support.AbstractIoFilterChain.access$1100(AbstractIoFilterChain.java:53)
+	at org.apache.mina.common.support.AbstractIoFilterChain$EntryImpl$1.messageReceived(AbstractIoFilterChain.java:648)
+	at org.apache.mina.filter.codec.support.SimpleProtocolDecoderOutput.flush(SimpleProtocolDecoderOutput.java:58)
+	at org.apache.mina.filter.codec.ProtocolCodecFilter.messageReceived(ProtocolCodecFilter.java:180)
+	at org.apache.mina.common.support.AbstractIoFilterChain.callNextMessageReceived(AbstractIoFilterChain.java:299)
+	at org.apache.mina.common.support.AbstractIoFilterChain.access$1100(AbstractIoFilterChain.java:53)
+	at org.apache.mina.common.support.AbstractIoFilterChain$EntryImpl$1.messageReceived(AbstractIoFilterChain.java:648)
+	at org.apache.mina.filter.executor.ExecutorFilter.processEvent(ExecutorFilter.java:220)
+	at org.apache.mina.filter.executor.ExecutorFilter$ProcessEventsRunnable.run(ExecutorFilter.java:264)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.mina.util.NamePreservingRunnable.run(NamePreservingRunnable.java:51)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.NoSuchMethodException: client.messages.commands.PlayerCommand$reborndb.<init>()
+	at java.lang.Class.getConstructor0(Unknown Source)
+	... 20 more
+
+------------------------ 2019-01-03 23:05:36 ------------------------
+java.lang.InstantiationException: client.messages.commands.PlayerCommand$rebornev
+	at java.lang.Class.newInstance(Unknown Source)
+	at client.messages.CommandProcessor.<clinit>(CommandProcessor.java:60)
+	at handling.channel.handler.ChatHandler.GeneralChat(ChatHandler.java:39)
+	at handling.MapleServerHandler.handlePacket(MapleServerHandler.java:511)
+	at handling.MapleServerHandler.messageReceived(MapleServerHandler.java:208)
+	at org.apache.mina.common.support.AbstractIoFilterChain$TailFilter.messageReceived(AbstractIoFilterChain.java:570)
+	at org.apache.mina.common.support.AbstractIoFilterChain.callNextMessageReceived(AbstractIoFilterChain.java:299)
+	at org.apache.mina.common.support.AbstractIoFilterChain.access$1100(AbstractIoFilterChain.java:53)
+	at org.apache.mina.common.support.AbstractIoFilterChain$EntryImpl$1.messageReceived(AbstractIoFilterChain.java:648)
+	at org.apache.mina.filter.codec.support.SimpleProtocolDecoderOutput.flush(SimpleProtocolDecoderOutput.java:58)
+	at org.apache.mina.filter.codec.ProtocolCodecFilter.messageReceived(ProtocolCodecFilter.java:180)
+	at org.apache.mina.common.support.AbstractIoFilterChain.callNextMessageReceived(AbstractIoFilterChain.java:299)
+	at org.apache.mina.common.support.AbstractIoFilterChain.access$1100(AbstractIoFilterChain.java:53)
+	at org.apache.mina.common.support.AbstractIoFilterChain$EntryImpl$1.messageReceived(AbstractIoFilterChain.java:648)
+	at org.apache.mina.filter.executor.ExecutorFilter.processEvent(ExecutorFilter.java:220)
+	at org.apache.mina.filter.executor.ExecutorFilter$ProcessEventsRunnable.run(ExecutorFilter.java:264)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at org.apache.mina.util.NamePreservingRunnable.run(NamePreservingRunnable.java:51)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.NoSuchMethodException: client.messages.commands.PlayerCommand$rebornev.<init>()
+	at java.lang.Class.getConstructor0(Unknown Source)
+	... 20 more

@@ -26,6 +26,7 @@ import handling.world.buddy.BuddyListEntry;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleCustomQuestStatus;
+import client.MapleJob;
 import client.MapleQuestStatus;
 import client.SkillFactory;
 import constants.MapConstants;
@@ -123,6 +124,11 @@ public class InterServerHandler {
         channelServer.addPlayer(player);
 
         c.getSession().write(MaplePacketCreator.getCharInfo(player));
+        
+        if (player.getLevel() <= 10) {
+            player.dcolormsg(3, "You're EXP Rates have been set to 1x until you reach level 11 or make your first job advancement!");
+        }
+        
         if (player.isGM()) {
             SkillFactory.getSkill(9101004).getEffect(1).applyTo(player);
         }
@@ -134,7 +140,7 @@ public class InterServerHandler {
             player.silentGiveBuffs(PlayerBuffStorage.getBuffsFromStorage(player.getId()));
             player.giveCoolDowns(PlayerBuffStorage.getCooldownsFromStorage(player.getId()));
             player.giveSilentDebuff(PlayerBuffStorage.getDiseaseFromStorage(player.getId()));
-
+            
             // Start of buddylist
             final int buddyIds[] = player.getBuddylist().getBuddyIds();
             World.Buddy.loggedOn(player.getName(), player.getId(), c.getChannel(), buddyIds, player.getGMLevel(), player.isHidden());
@@ -224,6 +230,7 @@ public class InterServerHandler {
         player.spawnClones();
         player.spawnSavedPets();
         player.updatePetAuto();
+        
         if (ServerConstants.SHOP_DISCOUNT) {
             c.getSession().write(MaplePacketCreator.enableShopDiscount((byte) ServerConstants.SHOP_DISCOUNT_PERCENT));
         }
@@ -249,6 +256,7 @@ public class InterServerHandler {
         ii.add(9010012);
         player.getClient().getSession().write(MaplePacketCreator.setNPCScriptable(ii));
     }
+    
 
     public static final void ChangeChannel(final SeekableLittleEndianAccessor slea, final MapleClient c, final MapleCharacter chr) {
         if (!chr.isAlive() || chr.getEventInstance() != null || chr.getMap() == null || FieldLimitType.ChannelSwitch.check(chr.getMap().getFieldLimit())) {
