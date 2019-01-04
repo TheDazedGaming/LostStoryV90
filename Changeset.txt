@@ -1,0 +1,96 @@
+Custom Quests handling
+Added a delay check for clicking NPCS twice. (No more disconnecting when double clicking on an NPC)
+Added a slotMax constants in GameConstants? where it can be toggled
+Chairs now display properly on the character info according to the chairs in the player's inventory
+Added SQL for custom quests system
+Expiration task now is checked upon changing channel and changing maps
+Items with the "removeOnLogout" flag is now fixed. It will be removed from the inventory when a player logs out.
+Fixed Replace next item for usage of quests. For example, Baby Dragon egg needs to hold for 30 minutes, and will hatch into Baby Dragon (Last time used for Evan chair quest). So basically, need to be online for 30 mins, if relog, = gone.
+Added shop discount feature. It can be toggled in ServerConstants?. Only potions can have discount rate.
+Added Level requirement check to shops, and expiration showed. ("Can be used for "X" minutes after purchase")
+Arrows and rechargable items now display the quantity correctly in the shop.
+Bundles can now be sold in shops (Include Equips, others)
+Updated EXP Gain Show packet
+Added Triple Class to store 3 datas in a pair. Almost similiar to Pair Class
+Added Triple Trio EXP Event (Bonus exp will be given at every 3rd mob killed). After 1 hour of login until 2 hours: Bonus 30% EXP, 2 hours to 3 hours: Bonus 100% EXP, 3 hours to 4 hours: Bonus 150% EXP, 4 hours to 5 hours: Bonus 180% EXP, 5 hours and above: Bonus 200% EXP. The mob count will be reset upon changing channel/entering cs
+Added Quick Slots. Also, all new characters now will have the correct keymaps (With expeditions, family, etc)
+Patched Key Binding hacks (Certain skills cannot be placed onto the KeyMap?, such as Hidden Aran Skills, or maybe skills with level 0. Besides, Items with 0 quantity cannot be placed onto the KeyMap?)
+Fixed Cash Mount and Normal Mounts
+Fixed DK's Sacrifice Skill
+Follow feature now works (Legs not moving, need to check stance stuffs)
+Mounts tiredness now works and save in database (Mounts are also able to level now)
+Most of the stuffs which are using scheduledFuture for characters are moved to world based instead of creating a timer for every character. Less load, more efficient.
+Added locks to certain functions for MapleMapFactory?, it should be faster now
+Added a new buffstat where when certain buffs are active, hp loss will be decreased.
+Fully fixed Pet Item Ignore Tag. Items which are added to the exception list will not be looted by the pet. (Only Boss pets)
+Fixed Pet Auto HP and MP Handling. The specific potion will be saved into database and loaded upon login again.
+Cash Shop Coupon System fully works now. (Also works for multi items in one coupon
+Added Cash Shop Surprise
+Fixed some cash shop stuffs and disabled rings from the cash shop temporary
+Fixed null pointer exception for monsters without drops in the database
+Removed those threads used for loadings and I guess I'll use back the old method
+Fixed Error 38 with rings, but still don't work.
+Fully fixed Fairy's Pendant
+Add Hot Time Event. (Right now, players will obtain a Secret Box.). Will do the contents in it later.
+Updated Party Packets
+Party HP now shows properly to the party members upon changing map or logging in
+Party leader will not change when the leader has disconnected in a different map
+Added Visitor packet which displays the spaceship
+Started working on Expeditions
+Expeditions Handling (Also done the chat part)
+All items now have GM Logs to show where the item is obtained from.
+Fixed character deletion. A character cannot be deleted when it has a family or is a guild leader.
+Removed Duey and MTS
+Added reporting system for players (Players can use @report <ign> <type) (GMs can use @clearreport to clear all reports and @reports to list down the current available reported players)
+Added @game to warp to Henesys Game Park.
+Also added a check where the warping commands cannot be used in the same map.
+Added !pnpc and !pmob (A way to add life objects which are npc/mob to the map without modifying the XML). Also, Mob time is in seconds
+Use !reloadcustomlife to reload the custom life if life disappears after reloaded a specific map.
+All life data will be cached upon start and by doing this, it will just check from the hash map when a players enter a map.
+Patched a PE where players can talk to hidden NPCS
+Added follow system
+Fixed Ring effects (Friendship and couple rings now fully work)
+All skills are maxed upon changing that specific job
+Also, all fixed skill data are stored in a table and it will be loaded into a hash map upon server load since all skills are maxed. (We don't have to save each skill data into the database :D )
+Evan's Dragon will now be canceled if the player is buffed with monster riding skill.
+Max Skills from Kin NPC now only max beginner skills (Mostly mount skills)
+Evans skills are not added into addSkillInfo as it'll cause Error 38 (which I don't know why) so therefore updateSkill packet is sent upon login.
+Added Maple Speed Quiz. (Can be repeated once every hour)
+Multi Leveling works now. (No more negative EXP for now)
+Increased the respawn rate from mobs (Default is 1). Exception for storyline maps
+Added a field constant where the maximum number of items in a map before disposing can be toggled in ServerConstants?
+Fixed item leveling and now it will not go above 32767 where stats will not be lost now
+No more annoying AP popups upon leveling up (Maximum AP shown on Character stats will be 200) -> Will have to check more on this.
+Changed port from 8484 -> 6215
+Fixed vicious hammer
+Added Occupations handling. (Done for Vortex and Hunter Master)
+Added a check where Zeta Residue will not be wiped upon using @clearslot
+Fixed Mesos gain for a player which loots mesos when having around 2,147,000,000 mesos which caused it to overflow.
+Fixed Wheel of Destiny
+Added Soul Stone Revive packet
+Updated some game animations
+ixed Normal Scrolls, Potential Scrolls, Magnifying Glass and Miracle Cube effects/packets
+Patched portal hack and avoided players from damaging monsters when not in a specific map. (Portal count handling for attacking monsters and player movements). I'm not sure what is this used in officials, but I guess it could be used to stop the clone's "damage packet" when the character changes map after hitting a mob
+Completely fixed level PopUP message (Max ap shown at character stats are 199)
+Fixed Avatar Megaphone
+Increased the speed of looting
+Added Monster Bomb handling (Not full yet. Have to fix poison status 1st)
+Fixed Poison Bomb (GMS like now. Mist will only spawn at the thrown position)
+Some storyline stuffs for Deep Sea Spaceship Crash Site
+All newly made characters have Powerful visitor EQs (+10 to all stats which includes Watk and Matk)
+Visitor EQs and Zeta Residue is blocked from being traded, dropped, or unequipped in the storyline maps
+Fixed MapleMas? Party Potion
+Added a custom message upon hitting the reactors in the Deep sea
+Storyline stuffs (Did till the Energy Laboratory) -> Todo NPCS
+Added @buyZR and @sellZR
+Removed auto updater for ranking (Caused communications link failure ._.)
+Quest NPCs are now script-able (Yes, those .js scripts.)
+Added Instant level for Gamer
+Added @cloneMe and @removeClones for Ninja
+Added @Player <name> for Celebrity
+Added a check to see if the data is changed or not. If it is changed then commit to database, else, just leave it as it is. (Can reduce the unnecessary saving)
+Fixed Item Megaphone for equipped items
+Fixed Random Morphs (Cliff's Magic Potion and Maplemas Party Potion)
+Replaced MaplePacket? with array bytes (Removed MaplePacket? and ByteArrayMaplePacket?
+Fixed Skull Megaphone and Triple Megaphone
+Fully fixed buddy handling. Character must be online in order to add as a buddy. Also, when a character is in the Cash Shop, no buddy operations are allowed (Delete/Add?)
